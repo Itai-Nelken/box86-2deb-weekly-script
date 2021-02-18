@@ -80,7 +80,7 @@ function clean-up() {
 	rm -r $FILEDIR
 	cd $DEBDIR
 	#compress the folder with the dabe and sha1.txt into a tar.xz archive
-	tar -cjf $NOWDAY.tar.xz $NOWDAY/
+	tar -cJf $NOWDAY.tar.xz $NOWDAY/
 	#remove the box86 folder
 	cd $DIR || error "Failed to change directory to $DIR! (line 84)"
 	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 85)"
