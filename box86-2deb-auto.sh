@@ -69,6 +69,8 @@ function clean-up() {
 	echo $BOX86COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 67)"
 	#move the deb to the directory for the debs. if it fails, try again as root
 	mv box86*.deb $DEBDIR/$NOWDAY || sudo mv box86*.deb $DEBDIR/$NOWDAY || error "Failed to move deb! (line 69)"
+	#compress the folder with the dabe and sha1.txt into a tar.xz archive
+	tar -cjf $DEBDIR/$NOWDAY.tar.xz $NOWDAY/
 	#remove the box86 folder
 	cd $DIR || error "Failed to change directory to $DIR! (line 71)"
 	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 72)"
