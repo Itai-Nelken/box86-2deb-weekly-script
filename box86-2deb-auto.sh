@@ -90,6 +90,10 @@ while true; do
 		compile-box86 || error "Failed to run compile-box86 function! (line 88)"
 		package-box86 || error "Failed to run package-box86 function! (line 89)"
 		clean-up || error "Failed to run clean-up function! (line 90)"
+		#clear the screen (scrolling up)
+		clear -x
+		#print message
+		echo "waiting for 7 days..."
 		#sleep for 7 days
 		sleep 604800 || error "Failed to sleep for 7 days! (line 92)"
 	fi
