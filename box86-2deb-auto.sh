@@ -4,6 +4,8 @@
 DIR="$HOME/Documents/box86-auto-build"
 #define the directory where the deb will be moved to
 DEBDIR="$HOME/Documents/box86-auto-build/debs"
+#current date in YY/MM/DD format
+NOWDAY="`printf '%(%Y-%m-%d)T\n' -1`"
 
 function error() {
 	echo -e "\e[91m$1\e[39m"
@@ -61,7 +63,7 @@ function package-box86() {
 
 function clean-up() {
 	#make a folder with the name of the current date (YY/MM/DD format)
-	mkdir $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 64)"
+	mkdir -p $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 64)"
 	#make a file with the current sha1 (commit) of the box86 version just compiled.
 	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 71)"
 	echo $BOX86COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 67)"
