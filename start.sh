@@ -18,15 +18,15 @@ if [[ $ARCH == "armv7l" ]] || [[ $ARCH == "arm64" ]] || [[ $ARCH == "aarch64" ]]
 fi
 
 #check that checkinstall is installed
-if ! command -v checkinstall >/dev/null/; then
+if ! command -v checkinstall &>/dev/null/; then
+	echo -e "checkinstall is installed $(tput setaf 2)✔︎$(tput sgr 0)"
+else
     read -p "checkinstall is required but not installed, do you want to install it? (y/n)?" choice
     case "$choice" in 
     y|Y|yes ) check=1;;
     n|N|no ) echo "can't continue without checkinstall! exiting in 10 seconds"; sleep 10; exit 1;;
     * ) echo "invalid";;
     esac
-else
-	echo -e "checkinstall is installed $(tput setaf 2)✔︎$(tput sgr 0)"
 fi
 if [[ $check == "1" ]]; then
     wget https://archive.org/download/macos_921_qemu_rpi/checkinstall_20210123-1_armhf.deb
