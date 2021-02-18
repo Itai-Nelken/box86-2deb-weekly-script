@@ -4,8 +4,6 @@
 DIR="$HOME/Documents/box86-auto-build"
 #define the directory where the deb will be moved to
 DEBDIR="$HOME/Documents/box86-auto-build/debs"
-#current date in YY/MM/DD format
-NOWDAY="`printf '%(%Y-%m-%d)T\n' -1`"
 
 function error() {
 	echo -e "\e[91m$1\e[39m"
@@ -62,18 +60,29 @@ function package-box86() {
 }
 
 function clean-up() {
+	#current date in YY/MM/DD format
+	NOWDAY="`printf '%(%Y-%m-%d)T\n' -1`"
 	#make a folder with the name of the current date (YY/MM/DD format)
-	mkdir -p $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 64)"
+	mkdir -p $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 66)"
 	#make a file with the current sha1 (commit) of the box86 version just compiled.
-	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 71)"
-	echo $BOX86COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 67)"
+	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 68)"
+	echo $BOX86COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 69)"
 	#move the deb to the directory for the debs. if it fails, try again as root
-	mv box86*.deb $DEBDIR/$NOWDAY || sudo mv box86*.deb $DEBDIR/$NOWDAY || error "Failed to move deb! (line 69)"
+	mv box86*.deb $DEBDIR/$NOWDAY || sudo mv box86*.deb $DEBDIR/$NOWDAY || error "Failed to move deb! (line 71)"
+	#remove the home directory from the deb
+	cd $DEBDIR/$NOWDAY || error "Failed to change directory to $DEBDIR/$NOWDAY! (line 73)"
+	FILE="`basename *.deb`"
+	FILEDIR="`echo $FILE | cut -c1-19`"
+	dpkg-deb -R $FILE $FILEDIR
+	rm -r $FILEDIR/home
+	rm -f $FILE
+	dpkg-deb -b $FILEDIR $FILE
+	rm -r $FILEDIR
 	#compress the folder with the dabe and sha1.txt into a tar.xz archive
 	tar -cjf $DEBDIR/$NOWDAY.tar.xz $NOWDAY/
 	#remove the box86 folder
-	cd $DIR || error "Failed to change directory to $DIR! (line 71)"
-	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 72)"
+	cd $DIR || error "Failed to change directory to $DIR! (line 84)"
+	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 85)"
 }
 
 # main loop, this runs for always until stopped.
@@ -89,15 +98,15 @@ while true; do
 	if [[ "$NOW" == "Thu" ]]; then
 		echo "today is thursday"
 		echo "compile time!"
-		compile-box86 || error "Failed to run compile-box86 function! (line 88)"
-		package-box86 || error "Failed to run package-box86 function! (line 89)"
+		compile-box86 || error "Failed to run compile-box86 function! (line 101)"
+		package-box86 || error "Failed to run package-box86 function! (line 102)"
 		clean-up || error "Failed to run clean-up function! (line 90)"
 		#clear the screen (scrolling up)
 		clear -x
 		#print message
 		echo "waiting for 7 days..."
 		#sleep for 7 days
-		sleep 604800 || error "Failed to sleep for 7 days! (line 92)"
+		sleep 604800 || error "Failed to sleep for 7 days! (line 109)"
 	fi
 
 done
