@@ -20,7 +20,7 @@ if [[ $ARCH == "armv7l" ]] || [[ $ARCH == "arm64" ]] || [[ $ARCH == "aarch64" ]]
 fi
 
 #check that checkinstall is installed
-if ! command -v checkinstall &>/dev/null; then
+if ! whereis checkinstall &>/dev/null; then
 	echo -e "checkinstall is installed $(tput setaf 2)✔︎$(tput sgr 0)"
 else
     read -p "checkinstall is required but not installed, do you want to install it? (y/n)?" choice
