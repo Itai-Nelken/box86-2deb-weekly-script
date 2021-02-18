@@ -11,7 +11,7 @@ if [[ $ARCH == "armv7l" ]] || [[ $ARCH == "arm64" ]] || [[ $ARCH == "aarch64" ]]
     if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
         error "This script doesn't work on arm64!"
     elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
-        echo "arch is armhf/armv7l ✔︎"
+        echo -e "arch is armhf/armv7l $(tput setaf 2)✔︎$(tput sgr 0)"
     else
         error "Failed to detect OS CPU architecture! Something is very wrong."
     fi
@@ -25,6 +25,8 @@ if ! command -v checkinstall >/dev/null/; then
     n|N|no ) echo "can't continue without checkinstall! exiting in 10 seconds"; sleep 10; exit 1;;
     * ) echo "invalid";;
     esac
+else
+	echo -e "checkinstall is installed $(tput setaf 2)✔︎$(tput sgr 0)"
 fi
 if [[ $check == "1" ]]; then
     wget https://archive.org/download/macos_921_qemu_rpi/checkinstall_20210123-1_armhf.deb
