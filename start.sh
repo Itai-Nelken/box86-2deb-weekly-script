@@ -5,6 +5,8 @@ function error() {
  	exit 1
 }
 
+DIR="`pwd`"
+
 #check that OS arch is armhf
 ARCH="`uname -m`"
 if [[ $ARCH == "armv7l" ]] || [[ $ARCH == "arm64" ]] || [[ $ARCH == "aarch64" ]]; then
@@ -18,7 +20,7 @@ if [[ $ARCH == "armv7l" ]] || [[ $ARCH == "arm64" ]] || [[ $ARCH == "aarch64" ]]
 fi
 
 #check that checkinstall is installed
-if ! command -v checkinstall &>/dev/null/; then
+if ! command -v checkinstall &>/dev/null; then
 	echo -e "checkinstall is installed $(tput setaf 2)✔︎$(tput sgr 0)"
 else
     read -p "checkinstall is required but not installed, do you want to install it? (y/n)?" choice
@@ -32,5 +34,13 @@ if [[ $check == "1" ]]; then
     wget https://archive.org/download/macos_921_qemu_rpi/checkinstall_20210123-1_armhf.deb
     sudo apt -f -y install checkinstall_20210123-1_armhf.deb
     rm -f checkinstall_20210123-1_armhf.deb
+fi
+if [[ -x "$DIR/box86-2deb-auto.sh" ]]; then
+	echo -e "script is executable $(tput setaf 2)✔︎$(tput sgr 0)"
+else
+	echo -e "script isn't executable! $(tput setaf 1)❌$(tput sgr 0)"
+	echo "making script executable..."
+	sudo chmod +x box86-2deb-auto.sh || error "Failed to mark script as executable!"
+	echo -e "done! $(tput setaf 2)✔︎$(tput sgr 0)"
 fi
 ./box86-2deb-auto.sh || error "Failed to start script!"
