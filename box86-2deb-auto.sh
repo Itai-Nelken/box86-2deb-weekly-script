@@ -78,6 +78,7 @@ function clean-up() {
 	rm -f $FILE
 	dpkg-deb -b $FILEDIR $FILE
 	rm -r $FILEDIR
+	cd $BUILDDIR
 	#compress the folder with the dabe and sha1.txt into a tar.xz archive
 	tar -cjf $DEBDIR/$NOWDAY.tar.xz $NOWDAY/
 	#remove the box86 folder
