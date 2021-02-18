@@ -73,14 +73,14 @@ function clean-up() {
 	cd $DEBDIR/$NOWDAY || error "Failed to change directory to $DEBDIR/$NOWDAY! (line 73)"
 	FILE="`basename *.deb`"
 	FILEDIR="`echo $FILE | cut -c1-19`"
-	dpkg-deb -R $FILE $FILEDIR
-	rm -r $FILEDIR/home
+	dpkg-deb -R $FILE $FILEDIR || error "Failed to extract the deb! (line 76)"
+	rm -r $FILEDIR/home || error "Failed to remve home folder from the deb! (line 77)"
 	rm -f $FILE
 	dpkg-deb -b $FILEDIR $FILE
 	rm -r $FILEDIR
-	cd $BUILDDIR
+	cd $DEBDIR
 	#compress the folder with the dabe and sha1.txt into a tar.xz archive
-	tar -cjf $DEBDIR/$NOWDAY.tar.xz $NOWDAY/
+	tar -cjf $NOWDAY.tar.xz $NOWDAY/
 	#remove the box86 folder
 	cd $DIR || error "Failed to change directory to $DIR! (line 84)"
 	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 85)"
