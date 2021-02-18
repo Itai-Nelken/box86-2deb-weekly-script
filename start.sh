@@ -5,6 +5,12 @@ function error() {
  	exit 1
 }
 
+if [[ "$1" == "--about" ]]; then
+	echo "script by Itai-Nelken"
+	echo "a script that automatically compiles and packages box86"
+	echo "into a deb using checkinstall."
+fi
+
 DIR="`pwd`"
 
 #check that OS arch is armhf
