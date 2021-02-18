@@ -8,7 +8,7 @@ cd box86-2deb-weekly-script
 sudo chmod +x start.sh
 ./start.sh
 ```
-## Note: this script only works on armhf Linux Debian and Debian based OS's.
+### Note: this script only works on armhf Linux Debian and Debian based OS's.
 
 ## License
 [GNU GPL v3](https://github.com/Itai-Nelken/box86-2deb-weekly-script/blob/main/LICENSE)
