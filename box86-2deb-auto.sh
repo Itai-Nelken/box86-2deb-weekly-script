@@ -106,7 +106,8 @@ while true; do
 		clear -x
 		#write to the log file that build and packaging are complete
 		touch box86-2deb-weekly_log.log
-		echo "[$NOWDAY] build and packaging complete." >> box86-2deb-weekly_log.log
+		NOWTIME="`date +"%T"`"
+		echo "[$NOWTIME | $NOWDAY] build and packaging complete." >> box86-2deb-weekly_log.log
 		#print message
 		echo "waiting for 7 days..."
 		#count down for 7 days
