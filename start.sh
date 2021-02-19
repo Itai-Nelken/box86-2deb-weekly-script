@@ -8,7 +8,7 @@ function error() {
  	exit 1
 }
 
-#update function (tocheck for updates)
+#update function (to check for updates)
 function updater() {
 	echo "Checking for updates..."
 	localhash="$(git rev-parse HEAD)"
@@ -65,7 +65,7 @@ if [[ $ARCH == "armv7l" ]] || [[ $ARCH == "arm64" ]] || [[ $ARCH == "aarch64" ]]
 fi
 
 #check that checkinstall is installed, if not ask to install it.
-if ! whereis checkinstall &>/dev/null; then
+if ! command -v checkinstall >/dev/null ; then
     read -p "checkinstall is required but not installed, do you want to install it? (y/n)?" choice
     case "$choice" in 
     y|Y|yes|YES ) check=1;;
