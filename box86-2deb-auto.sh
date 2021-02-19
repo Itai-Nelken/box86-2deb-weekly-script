@@ -119,8 +119,17 @@ while true; do
 		done
 	else
 		echo "not today :("
-		#sleep 10 minutes
-		sleep 600
+		somevar="0"
+		for i in {1..10}; do
+			echo "$somevar minutes passed..."
+			somevar=$(($somevar+1))
+			sleep 60
+		done
+		echo "10 minutes passed"
+		echo "
+		
+		"
+
 	fi
 
 done
