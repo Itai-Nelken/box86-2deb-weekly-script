@@ -117,6 +117,10 @@ while true; do
 			sleep 86400
 			DAYSLEFT=$((DAYSLEFT-1))
 		done
+	else
+		echo "not today :("
+		#sleep 10 minutes
+		sleep 600
 	fi
 
 done
