@@ -26,7 +26,7 @@ fi
 #get current directory and assign it to the 'DIR' variable
 DIR="`pwd`"
 #check that script is being run from the correct directory
-if [[ $DIR != "$HOME/Documents/box86-2deb-weekly-script" ]] || [[ $DIR != "$HOME/Documents/box86-2deb-weekly-script/" ]]; then
+if [[ ! $DIR != "$HOME/Documents/box86-2deb-weekly-script" ]] || [[ $DIR != "$HOME/Documents/box86-2deb-weekly-script/" ]]; then
     error "script isn't being run from $HOME/Documents/box86-2deb-weekly-script'!\nplease read the readme for usage instructions."
 else
     echo -e "script is being run from correct directory $(tput setaf 2)✔︎$(tput sgr 0)"
