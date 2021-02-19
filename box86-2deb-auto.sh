@@ -40,10 +40,10 @@ function package-box86() {
 	#create the doc-pak directory and copy to it the readme, usage, changelog and license.
 	#this will go in /usr/doc/box86 when the deb is installed.
 	mkdir doc-pak || error "Failed to create doc-pak! (line 42)"
-	cp $DIR/box86/README.md $BUILDDIR/doc-pak || error "Failed to copy README.md to doc-pak! (line 43)"
-	cp $DIR/box86/CHANGELOG.md $BUILDDIR/doc-pak || error "Failed to copy CHANGELOG.md to doc-pak! (line 44)"
-	cp $DIR/box86/USAGE.md $BUILDDIR/doc-pak || error "Failed to copy USAGE.md to doc-pak! (line 45)"
-	cp $DIR/box86/LICENSE $BUILDDIR/doc-pak || error "Failed to copy LICENSE to doc-pak! (line 46)"
+	cp $DIR/box86/docs/README.md $BUILDDIR/doc-pak || error "Failed to copy README.md to doc-pak! (line 43)"
+	cp $DIR/box86/docs/CHANGELOG.md $BUILDDIR/doc-pak || error "Failed to copy CHANGELOG.md to doc-pak! (line 44)"
+	cp $DIR/box86/docs/USAGE.md $BUILDDIR/doc-pak || error "Failed to copy USAGE.md to doc-pak! (line 45)"
+	cp $DIR/box86/docs/LICENSE $BUILDDIR/doc-pak || error "Failed to copy LICENSE to doc-pak! (line 46)"
 	#create description-pak.
 	#checkinstall will use this for the deb's control file description and summary entries.
 	echo "Linux Userspace x86 Emulator with a twist
