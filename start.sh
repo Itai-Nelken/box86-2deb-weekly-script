@@ -22,7 +22,7 @@ if [ "$localhash" != "$latesthash" ] && [ ! -z "$latesthash" ] && [ ! -z "$local
     sudo chmod +x start.sh
     sudo chmod +x box86-2deb-auto.sh
 else
-    echo "Up to date."
+    echo "Up to date $(tput setaf 2)✔︎$(tput sgr 0)"
 fi
 }
 
@@ -31,6 +31,8 @@ if [ "$EUID" = 0 ]; then
   error "You cannot run this script as root!"
 fi
 
+#check for updates
+updater
 #get current directory and assign it to the 'DIR' variable
 DIR="`pwd`"
 #check that script is being run from the correct directory
