@@ -85,7 +85,7 @@ function clean-up() {
 	tar -cJf $NOWDAY.tar.xz $NOWDAY/
 	#remove the box86 folder
 	cd $DIR || error "Failed to change directory to $DIR! (line 87)"
-	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 88)"
+	sudo rm -rf box86 || error "Failed to remove box86 folder! (line 88)"
 }
 
 function upload-deb() {
