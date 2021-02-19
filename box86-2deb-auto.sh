@@ -143,6 +143,8 @@ while true; do
 		NOWTIME="`date +"%T"`"
 		echo "[$NOWTIME | $NOWDAY] build and packaging complete." >> box86-2deb-weekly_log.log
 		upload-deb || error "Failed to upload deb! (line 145)"
+		#write to log that uploading is complete
+		echo "[$NOWTIME | $NOWDAY] uploading complete." >> box86-2deb-weekly_log.log
 		#print message
 		echo "waiting for 7 days..."
 		#count down for 7 days
