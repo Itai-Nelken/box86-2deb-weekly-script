@@ -122,6 +122,3 @@ else
 	echo -e "done! $(tput setaf 2)✔︎$(tput sgr 0)"
 fi
 ./box86-2deb-auto.sh || error "Failed to start script!"
-
-
-#######CHECK THAT start.sh ISN'T BEING RUN AS ROOT#######################
