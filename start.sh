@@ -14,15 +14,23 @@ if [ "$EUID" = 0 ]; then
 fi
 
 #about flag.
-#usahe: ./start.sh --about
+#usage: ./start.sh --about
 if [[ "$1" == "--about" ]]; then
-	echo "script by Itai-Nelken"
+	#echo "script by Itai-Nelken"
 	echo "a script that automatically compiles and packages box86"
 	echo "into a deb using checkinstall."
+    cat credits
+    exit 0
 fi
 
 #get current directory and assign it to the 'DIR' variable
 DIR="`pwd`"
+#check that script is being run from the correct directory
+if [[ $DIR != "$HOME/Documents/box86-2deb-weekly-script" ]] || [[ $DIR != "$HOME/Documents/box86-2deb-weekly-script/" ]]; then
+    error "script isn't being run from $HOME/Documents/box86-2deb-weekly-script'!\nplease read the readme for usage instructions."
+else
+    echo -e "script is being run from correct directory $(tput setaf 2)✔︎$(tput sgr 0)"
+fi
 
 #check that OS arch is armhf
 ARCH="`uname -m`"
@@ -40,8 +48,8 @@ fi
 if ! whereis checkinstall &>/dev/null; then
     read -p "checkinstall is required but not installed, do you want to install it? (y/n)?" choice
     case "$choice" in 
-    y|Y|yes ) check=1;;
-    n|N|no ) echo "can't continue without checkinstall! exiting in 10 seconds"; sleep 10; exit 1;;
+    y|Y|yes|YES ) check=1;;
+    n|N|no|NO ) echo "can't continue without checkinstall! exiting in 10 seconds"; sleep 10; exit 1;;
     * ) echo "invalid";;
     esac
 else
