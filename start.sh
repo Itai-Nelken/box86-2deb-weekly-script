@@ -1,16 +1,27 @@
 #!/bin/bash
 
+#error function.
+#print $1 in red and exit with exit code 1.
+#example usage: error "Failed to do something!"
 function error() {
 	echo -e "\e[91m$1\e[39m"
  	exit 1
 }
 
+#check that script isn't being run as root.
+if [ "$EUID" = 0 ]; then
+  error "You cannot run this script as root!"
+fi
+
+#about flag.
+#usahe: ./start.sh --about
 if [[ "$1" == "--about" ]]; then
 	echo "script by Itai-Nelken"
 	echo "a script that automatically compiles and packages box86"
 	echo "into a deb using checkinstall."
 fi
 
+#get current directory and assign it to the 'DIR' variable
 DIR="`pwd`"
 
 #check that OS arch is armhf
@@ -25,7 +36,7 @@ if [[ $ARCH == "armv7l" ]] || [[ $ARCH == "arm64" ]] || [[ $ARCH == "aarch64" ]]
     fi
 fi
 
-#check that checkinstall is installed
+#check that checkinstall is installed, if not ask to install it.
 if ! whereis checkinstall &>/dev/null; then
     read -p "checkinstall is required but not installed, do you want to install it? (y/n)?" choice
     case "$choice" in 
@@ -41,6 +52,18 @@ if [[ $check == "1" ]]; then
     sudo apt -f -y install checkinstall_20210123-1_armhf.deb
     rm -f checkinstall_20210123-1_armhf.deb
 fi
+
+#check that '~/Documents/box86-auto-build' (and '~/Documents/box86-auto-build/debs') exist.
+if [[ ! -d "$HOME/Documents/box86-auto-build" ]]; then
+    echo -e "'$HOME/Documents/box86-auto-build' doesn't exist! $(tput setaf 1)❌$(tput sgr 0)"
+    echo "creating it..."
+    mkdir -p $HOME/Documents/box86-auto-build/debs
+    echo -e "done! $(tput setaf 2)✔︎$(tput sgr 0)"
+else
+    echo -e "'$HOME/Documents/box86-auto-build' exists $(tput setaf 2)✔︎$(tput sgr 0)"
+fi
+
+#check if main script is executable, if no make it executable.
 if [[ -x "$DIR/box86-2deb-auto.sh" ]]; then
 	echo -e "script is executable $(tput setaf 2)✔︎$(tput sgr 0)"
 else
@@ -50,3 +73,6 @@ else
 	echo -e "done! $(tput setaf 2)✔︎$(tput sgr 0)"
 fi
 ./box86-2deb-auto.sh || error "Failed to start script!"
+
+
+#######CHECK THAT start.sh ISN'T BEING RUN AS ROOT#######################
