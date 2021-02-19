@@ -106,8 +106,13 @@ while true; do
 		clear -x
 		#print message
 		echo "waiting for 7 days..."
-		#sleep for 7 days
-		sleep 604800 || error "Failed to sleep for 7 days! (line 109)"
+		#count down for 7 days
+		DAYSLEFT="7"
+		for i in {1..7}; do
+			echo "$DAYSLEFT days left..."
+			sleep 86400
+			DAYSLEFT=$((DAYSLEFT-1))
+		done
 	fi
 
 done
