@@ -103,12 +103,12 @@ function upload-deb() {
 	dpkg-scanpackages . /dev/null > Packages
 	gzip -9c Packages > Packages.gz
 	touch Release
-	echo "Origin: weekly_box86_debs
-	Label: weekly_box86_debs
-	Codename: buster
-	Architectures: armhf
-	Components: main
-	Description: weekly box86 debs" > $HOME/Documents/weekly-box86-debs/debs/Release
+	echo "Origin: 'weekly_box86_debs'
+	Label: 'weekly_box86_debs'
+	Codename: 'buster'
+	Architectures: 'armhf'
+	Components: 'main'
+	Description: 'weekly box86 debs'" > $HOME/Documents/weekly-box86-debs/debs/Release
 	echo -e "Date: `LANG=C date -Ru`" >> Release
 	echo -e 'MD5Sum:' >> Release
 	printf ' '$(md5sum Packages.gz | cut --delimiter=' ' --fields=1)' %16d Packages.gz' $(wc --bytes Packages.gz | cut --delimiter=' ' --fields=1) >> Release
