@@ -8,7 +8,10 @@ cd box86-2deb-weekly-script
 sudo chmod +x start.sh
 ./start.sh
 ```
-### Note: this script only works on armhf Linux Debian and Debian based OS's.
+### Notes:
+1) This script only works on **armhf** Linux Debian and Debian based OS's.
+2) by default, this script will compile and package box86 on Thursday every week until stopped.<br>to change to fifferent day, change the `Thu` in line 99 of
+
 
 ## License
 [GNU GPL v3](https://github.com/Itai-Nelken/box86-2deb-weekly-script/blob/main/LICENSE)
