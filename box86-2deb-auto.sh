@@ -94,6 +94,7 @@ function upload-deb() {
 	rm -f $HOME/Documents/weekly-box86-debs/debs/Packages.gz
 	rm -f $HOME/Documents/weekly-box86-debs/debs/Release
 	#create new apt files
+	cd $HOME/Documents/weekly-box86-debs/debs/
 	dpkg-scanpackages . /dev/null > Packages
 	gzip -9c Packages > Packages.gz
 	echo "Origin: weekly_box86_debs
@@ -111,7 +112,6 @@ function upload-deb() {
 	printf '\n '$(sha256sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release
 	#remove '.1' from end of deb
 	mv $HOME/Documents/weekly-box86-debs/debs/$FILE.1 $FILE
-	cd $HOME/Documents/weekly-box86-debs/debs/Packages
 	git stage debs/
 	echo "updated deb" > commit.txt
 	git commit --file=commit.txt
