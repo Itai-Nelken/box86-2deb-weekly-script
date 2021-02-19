@@ -19,6 +19,8 @@ if [ "$localhash" != "$latesthash" ] && [ ! -z "$latesthash" ] && [ ! -z "$local
     git clean -fd
     git reset --hard
     git pull https://github.com/Itai-Nelken/box86-2deb-weekly-script.git HEAD || error 'Unable to update, please check your internet connection'
+    sudo chmod +x start.sh
+    sudo chmod +x box86-2deb-auto.sh
 else
     echo "Up to date."
 fi
