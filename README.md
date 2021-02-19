@@ -10,6 +10,7 @@ sudo chmod +x start.sh
 ./start.sh
 ```
 to view credits and other info, type: `./start.sh --about`. that will show the credits and some more info and exit.
+to update the scripts, type: `./start.sh --update`
 ### Notes:
 1) This script only works on **armhf** Linux Debian and Debian based OS's.
 2) it's **VERY IMPORTANT** to git clone and run the scripts from **there folder** in **~/Documents**!!!

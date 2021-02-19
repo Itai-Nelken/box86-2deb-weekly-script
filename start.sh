@@ -8,9 +8,34 @@ function error() {
  	exit 1
 }
 
+#update function (tocheck for updates)
+function updater() {
+	echo "Checking for updates..."
+	localhash="$(git rev-parse HEAD)"
+	latesthash="$(git ls-remote https://github.com/Itai-Nelken/box86-2deb-weekly-script HEAD | awk '{print $1}')"
+
+if [ "$localhash" != "$latesthash" ] && [ ! -z "$latesthash" ] && [ ! -z "$localhash" ];then
+    echo "Out of date, updating now..."
+    git clean -fd
+    git reset --hard
+    git pull https://github.com/Itai-Nelken/box86-2deb-weekly-script.git HEAD || error 'Unable to update, please check your internet connection'
+else
+    echo "Up to date."
+fi
+}
+
 #check that script isn't being run as root.
 if [ "$EUID" = 0 ]; then
   error "You cannot run this script as root!"
+fi
+
+#get current directory and assign it to the 'DIR' variable
+DIR="`pwd`"
+#check that script is being run from the correct directory
+if [[ ! $DIR == "$HOME/Documents/box86-2deb-weekly-script" ]]; then
+    error "script isn't being run from $HOME/Documents/box86-2deb-weekly-script'!\nplease read the readme for usage instructions."
+else
+    echo -e "script is being run from correct directory $(tput setaf 2)✔︎$(tput sgr 0)"
 fi
 
 #about flag.
@@ -21,15 +46,10 @@ if [[ "$1" == "--about" ]]; then
 	echo "into a deb using checkinstall."
     cat credits
     exit 0
-fi
-
-#get current directory and assign it to the 'DIR' variable
-DIR="`pwd`"
-#check that script is being run from the correct directory
-if [[ ! $DIR == "$HOME/Documents/box86-2deb-weekly-script" ]]; then
-    error "script isn't being run from $HOME/Documents/box86-2deb-weekly-script'!\nplease read the readme for usage instructions."
-else
-    echo -e "script is being run from correct directory $(tput setaf 2)✔︎$(tput sgr 0)"
+elif [[ $1 == "--update" ]]; then
+    updater
+    sudo chmod +x start.sh
+    exit 0
 fi
 
 #check that OS arch is armhf
