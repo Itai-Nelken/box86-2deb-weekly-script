@@ -118,7 +118,7 @@ function upload-deb() {
 	printf '\n '$(sha256sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release
 	cd ..
 	git stage debs/
-	echo "updated deb" > commit.txt
+	echo "updated deb to $BOX86COMMIT" > commit.txt
 	git commit --file=commit.txt
 	git push
 	rm -f commit.txt
@@ -145,6 +145,10 @@ while true; do
 		clear -x
 		#write to the log file that build and packaging are complete
 		touch box86-2deb-weekly_log.log
+		TIME="`date`"
+		echo "=============================
+		$TIME
+		=============================" >> box86-2deb-weekly_log.log
 		NOWTIME="`date +"%T"`"
 		echo "[$NOWTIME | $NOWDAY] build and packaging complete." >> box86-2deb-weekly_log.log
 		upload-deb || error "Failed to upload deb! (line 150)"
