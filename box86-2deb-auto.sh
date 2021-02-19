@@ -87,12 +87,15 @@ function clean-up() {
 }
 
 function upload-deb() {
-	#copy the deb in box86*.deb.1
-	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debs/$FILE.1
+	#remove old deb
+	rm $HOME/Documents/weekly-box86-debs/debs/box86*.deb
+	#copy the new deb and tar.xz
+	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debs/$FILE
+	cp $DEBDIR/$NOWDAY.tar.xz $HOME/Documents/weekly-box86-debs/debs/$NOWDAY.tar.xz
 	#remove apt files
-	rm -f $HOME/Documents/weekly-box86-debs/debs/Packages
-	rm -f $HOME/Documents/weekly-box86-debs/debs/Packages.gz
-	rm -f $HOME/Documents/weekly-box86-debs/debs/Release
+	rm $HOME/Documents/weekly-box86-debs/debs/Packages
+	rm $HOME/Documents/weekly-box86-debs/debs/Packages.gz
+	rm $HOME/Documents/weekly-box86-debs/debs/Release
 	#create new apt files
 	cd $HOME/Documents/weekly-box86-debs/debs/
 	dpkg-scanpackages . /dev/null > Packages
@@ -111,9 +114,8 @@ function upload-deb() {
 	echo -e '\nSHA256:' >> Release
 	printf ' '$(sha256sum Packages.gz | cut --delimiter=' ' --fields=1)' %16d Packages.gz' $(wc --bytes Packages.gz | cut --delimiter=' ' --fields=1) >> Release
 	printf '\n '$(sha256sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release
-	#remove '.1' from end of deb
-	mv $HOME/Documents/git/weekly-box86-debs/debs/$FILE.1 $HOME/Documents/git/weekly-box86-debs/debs/$FILE
-	git stage debs/box86_0.2.1-1_armhf.deb debs/Packages debs/Packages.gz debs/Release
+	cd ..
+	git stage debs/
 	echo "updated deb" > commit.txt
 	git commit --file=commit.txt
 	git push
