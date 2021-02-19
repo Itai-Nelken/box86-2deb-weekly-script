@@ -51,29 +51,31 @@ function package-box86() {
 	Box86 lets you run x86 Linux programs (such as games)
 	on non-x86 Linux, like ARM 
 	(host system needs to be 32bit little-endian).">description-pak || error "Failed to create description-pak! (line 53)"
+	echo "#!/bin/bash
+	systemctl restart systemd-binfmt">postinstall-pak || error "Failed to create postinstall-pak! (line 55)"
 
 	#get the just compiled box86 version using the get-box86-version function.
-	get-box86-version ver  || error "Failed to get box86 version! (line 56)"
+	get-box86-version ver  || error "Failed to get box86 version! (line 58)"
 	#use checkinstall to package box86 into a deb.
 	#all the options are so checkinstall doesn't ask any questions but still has the data it needs.
-	sudo checkinstall -y -D --pkgversion="$BOX86VER" --provides="box86" --conflicts="qemu-user-static" --pkgname="box86" --install="no" make install || error "Failed to run checkinstall! (line 59)"
+	sudo checkinstall -y -D --pkgversion="$BOX86VER" --provides="box86" --conflicts="qemu-user-static" --pkgname="box86" --install="no" make install || error "Failed to run checkinstall! (line 61)"
 }
 
 function clean-up() {
 	#current date in YY/MM/DD format
 	NOWDAY="`printf '%(%Y-%m-%d)T\n' -1`"
 	#make a folder with the name of the current date (YY/MM/DD format)
-	mkdir -p $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 66)"
+	mkdir -p $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 68)"
 	#make a file with the current sha1 (commit) of the box86 version just compiled.
-	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 68)"
-	echo $BOX86COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 69)"
+	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 70)"
+	echo $BOX86COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 71)"
 	#move the deb to the directory for the debs. if it fails, try again as root
-	mv box86*.deb $DEBDIR/$NOWDAY || sudo mv box86*.deb $DEBDIR/$NOWDAY || error "Failed to move deb! (line 71)"
+	mv box86*.deb $DEBDIR/$NOWDAY || sudo mv box86*.deb $DEBDIR/$NOWDAY || error "Failed to move deb! (line 73)"
 	#remove the home directory from the deb
-	cd $DEBDIR/$NOWDAY || error "Failed to change directory to $DEBDIR/$NOWDAY! (line 73)"
+	cd $DEBDIR/$NOWDAY || error "Failed to change directory to $DEBDIR/$NOWDAY! (line 75)"
 	FILE="`basename *.deb`"
 	FILEDIR="`echo $FILE | cut -c1-19`"
-	dpkg-deb -R $FILE $FILEDIR || error "Failed to extract the deb! (line 76)"
+	dpkg-deb -R $FILE $FILEDIR || error "Failed to extract the deb! (line 78)"
 	rm -r $FILEDIR/home
 	rm -f $FILE
 	dpkg-deb -b $FILEDIR $FILE
@@ -82,8 +84,8 @@ function clean-up() {
 	#compress the folder with the dabe and sha1.txt into a tar.xz archive
 	tar -cJf $NOWDAY.tar.xz $NOWDAY/
 	#remove the box86 folder
-	cd $DIR || error "Failed to change directory to $DIR! (line 85)"
-	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 86)"
+	cd $DIR || error "Failed to change directory to $DIR! (line 87)"
+	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 88)"
 }
 
 function upload-deb() {
@@ -136,16 +138,16 @@ while true; do
 	if [[ "$NOW" == "Thu" ]]; then
 		echo "today is Thursday,"
 		echo "compile time!"
-		compile-box86 || error "Failed to run compile-box86 function! (line 136)"
-		package-box86 || error "Failed to run package-box86 function! (line 137)"
-		clean-up || error "Failed to run clean-up function! (line 138)"
+		compile-box86 || error "Failed to run compile-box86 function! (line 141)"
+		package-box86 || error "Failed to run package-box86 function! (line 142)"
+		clean-up || error "Failed to run clean-up function! (line 143)"
 		#clear the screen (scrolling up)
 		clear -x
 		#write to the log file that build and packaging are complete
 		touch box86-2deb-weekly_log.log
 		NOWTIME="`date +"%T"`"
 		echo "[$NOWTIME | $NOWDAY] build and packaging complete." >> box86-2deb-weekly_log.log
-		upload-deb || error "Failed to upload deb! (line 145)"
+		upload-deb || error "Failed to upload deb! (line 150)"
 		#write to log that uploading is complete
 		echo "[$NOWTIME | $NOWDAY] uploading complete." >> box86-2deb-weekly_log.log
 		#print message
