@@ -97,7 +97,7 @@ while true; do
 	NOW="`date | cut -c1-3`"
 	#if the current day is thursday, compile and package box86
 	if [[ "$NOW" == "Thu" ]]; then
-		echo "today is thursday"
+		echo "today is Thursday"
 		echo "compile time!"
 		compile-box86 || error "Failed to run compile-box86 function! (line 101)"
 		package-box86 || error "Failed to run package-box86 function! (line 102)"
