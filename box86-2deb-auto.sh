@@ -97,6 +97,7 @@ function upload-deb() {
 	cd $HOME/Documents/weekly-box86-debs/debs/
 	dpkg-scanpackages . /dev/null > Packages
 	gzip -9c Packages > Packages.gz
+	touch Release
 	echo "Origin: weekly_box86_debs
 	Label: weekly_box86_debs
 	Codename: buster
@@ -111,8 +112,8 @@ function upload-deb() {
 	printf ' '$(sha256sum Packages.gz | cut --delimiter=' ' --fields=1)' %16d Packages.gz' $(wc --bytes Packages.gz | cut --delimiter=' ' --fields=1) >> Release
 	printf '\n '$(sha256sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release
 	#remove '.1' from end of deb
-	mv $HOME/Documents/weekly-box86-debs/debs/$FILE.1 $FILE
-	git stage debs/
+	mv $HOME/Documents/git/weekly-box86-debs/debs/$FILE.1 $HOME/Documents/git/weekly-box86-debs/debs/$FILE
+	git stage debs/box86_0.2.1-1_armhf.deb debs/Packages debs/Packages.gz debs/Release
 	echo "updated deb" > commit.txt
 	git commit --file=commit.txt
 	git push
