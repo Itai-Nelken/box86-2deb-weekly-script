@@ -2,6 +2,7 @@
  a script that automatically compiles and packages [box86](https://github.com/ptitSeb/box86) into a deb using [checkinstall](http://checkinstall.izto.org/).
 
 to download and run:
+### Please note that the scripts are built to work for my use case, you will have to tweak them so they work for you. 
 ```bash
 cd Documents
 git clone https://github.com/Itai-Nelken/box86-2deb-weekly-script.git
