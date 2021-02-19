@@ -80,9 +80,26 @@ else
 	echo -e "checkinstall is installed $(tput setaf 2)✔︎$(tput sgr 0)"
 fi
 if [[ $check == "1" ]]; then
+    sudo apt update
     wget https://archive.org/download/macos_921_qemu_rpi/checkinstall_20210123-1_armhf.deb -O $HOME/checkinstall_20210123-1_armhf.deb
     sudo apt -f -y install ~/checkinstall_20210123-1_armhf.deb
     rm -f ~/checkinstall_20210123-1_armhf.deb
+fi
+
+#check that cmake is installed
+if ! command -v cmake > /dev/null ; then
+    read -p "cmake is required but not installed, do you want to install it? (y/n)?" choice
+    case "$choice" in 
+    y|Y|yes|YES ) cmake=1;;
+    n|N|no|NO ) echo "can't continue without cmake! exiting in 10 seconds"; sleep 10; exit 1;;
+    * ) echo "invalid";;
+    esac
+else
+	echo -e "cmake is installed $(tput setaf 2)✔︎$(tput sgr 0)"
+fi
+if [[ $cmake == "1" ]]; then
+    sudo apt update
+    sudo apt -f -y install cmake
 fi
 
 #check that '~/Documents/box86-auto-build' (and '~/Documents/box86-auto-build/debs') exist.
