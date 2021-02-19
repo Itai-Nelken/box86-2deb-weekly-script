@@ -74,7 +74,7 @@ function clean-up() {
 	FILE="`basename *.deb`"
 	FILEDIR="`echo $FILE | cut -c1-19`"
 	dpkg-deb -R $FILE $FILEDIR || error "Failed to extract the deb! (line 76)"
-	rm -r $FILEDIR/home || error "Failed to remve home folder from the deb! (line 77)"
+	rm -r $FILEDIR/home
 	rm -f $FILE
 	dpkg-deb -b $FILEDIR $FILE
 	rm -r $FILEDIR
