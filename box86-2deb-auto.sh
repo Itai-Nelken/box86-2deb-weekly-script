@@ -86,6 +86,41 @@ function clean-up() {
 	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 85)"
 }
 
+#upload and package the deb function
+function upload-deb() {
+	#copy the deb in box86*.deb.1
+	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debs/$FILE.1
+	#remove apt files
+	rm -f $HOME/Documents/weekly-box86-debs/debs/Packages
+	rm -f $HOME/Documents/weekly-box86-debs/debs/Packages.gz
+	rm -f $HOME/Documents/weekly-box86-debs/debs/Release
+	#create new apt files
+	dpkg-scanpackages . /dev/null > Packages
+	gzip -9c Packages > Packages.gz
+	echo "Origin: weekly_box86_debs
+	Label: weekly_box86_debs
+	Codename: buster
+	Architectures: armhf
+	Components: main
+	Description: weekly box86 debs" > $HOME/Documents/weekly-box86-debs/debs/Release
+	echo -e "Date: `LANG=C date -Ru`" >> Release
+	echo -e 'MD5Sum:' >> Release
+	printf ' '$(md5sum Packages.gz | cut --delimiter=' ' --fields=1)' %16d Packages.gz' $(wc --bytes Packages.gz | cut --delimiter=' ' --fields=1) >> Release
+	printf '\n '$(md5sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release
+	echo -e '\nSHA256:' >> Release
+	printf ' '$(sha256sum Packages.gz | cut --delimiter=' ' --fields=1)' %16d Packages.gz' $(wc --bytes Packages.gz | cut --delimiter=' ' --fields=1) >> Release
+	printf '\n '$(sha256sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release
+	#remove '.1' from end of deb
+	mv $HOME/Documents/weekly-box86-debs/debs/$FILE.1 $FILE
+	cd $HOME/Documents/weekly-box86-debs/debs/Packages
+	git stage debs/
+	echo "updated deb" > commit.txt
+	git commit --file=commit.txt
+	git push
+	rm -f commit.txt
+	cd $DIR
+}
+
 # main loop, this runs for always until stopped.
 # the code inside assigns the current day to the NOW variable
 #then it checks if the day is thursday, if yes it compiles & packages box86
