@@ -76,9 +76,9 @@ else
 	echo -e "checkinstall is installed $(tput setaf 2)✔︎$(tput sgr 0)"
 fi
 if [[ $check == "1" ]]; then
-    wget https://archive.org/download/macos_921_qemu_rpi/checkinstall_20210123-1_armhf.deb
-    sudo apt -f -y install checkinstall_20210123-1_armhf.deb
-    rm -f checkinstall_20210123-1_armhf.deb
+    wget https://archive.org/download/macos_921_qemu_rpi/checkinstall_20210123-1_armhf.deb -O $HOME/checkinstall_20210123-1_armhf.deb
+    sudo apt -f -y install ~/checkinstall_20210123-1_armhf.deb
+    rm -f ~/checkinstall_20210123-1_armhf.deb
 fi
 
 #check that '~/Documents/box86-auto-build' (and '~/Documents/box86-auto-build/debs') exist.
