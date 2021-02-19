@@ -119,16 +119,15 @@ while true; do
 		done
 	else
 		echo "not today :("
-		somevar="0"
+		somevar="10"
 		for i in {1..10}; do
-			echo "$somevar minutes passed..."
-			somevar=$(($somevar+1))
+			echo "$somevar minutes left..."
+			somevar=$(($somevar-1))
 			sleep 60
 		done
 		echo "10 minutes passed"
-		echo "
-		
-		"
+		sleep 1
+		clear -x
 
 	fi
 
