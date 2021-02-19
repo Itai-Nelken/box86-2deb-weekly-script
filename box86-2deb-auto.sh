@@ -82,11 +82,10 @@ function clean-up() {
 	#compress the folder with the dabe and sha1.txt into a tar.xz archive
 	tar -cJf $NOWDAY.tar.xz $NOWDAY/
 	#remove the box86 folder
-	cd $DIR || error "Failed to change directory to $DIR! (line 84)"
-	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 85)"
+	cd $DIR || error "Failed to change directory to $DIR! (line 85)"
+	sudo rm -rf box86 || error "Failed to remoce box86 folder! (line 86)"
 }
 
-#upload and package the deb function
 function upload-deb() {
 	#copy the deb in box86*.deb.1
 	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debs/$FILE.1
@@ -122,27 +121,28 @@ function upload-deb() {
 }
 
 # main loop, this runs for always until stopped.
-# the code inside assigns the current day to the NOW variable
-#then it checks if the day is thursday, if yes it compiles & packages box86
+# the code inside assigns the current day to the $NOW variable
+#then it checks if the day is Thursday, if yes it compiles & packages box86
 #then it cleans up and waits for 7 days (604800 seconds).
-#after 7 days it checks if the day is thursday (it should be),
+#after 7 days it checks if the day is Thursday (it should be),
 #if yes it repeats what is described above.
 while true; do
 	#get the current day (example output: Thu (thursday))
 	NOW="`date | cut -c1-3`"
 	#if the current day is thursday, compile and package box86
 	if [[ "$NOW" == "Thu" ]]; then
-		echo "today is Thursday"
+		echo "today is Thursday,"
 		echo "compile time!"
-		compile-box86 || error "Failed to run compile-box86 function! (line 101)"
-		package-box86 || error "Failed to run package-box86 function! (line 102)"
-		clean-up || error "Failed to run clean-up function! (line 90)"
+		compile-box86 || error "Failed to run compile-box86 function! (line 136)"
+		package-box86 || error "Failed to run package-box86 function! (line 137)"
+		clean-up || error "Failed to run clean-up function! (line 138)"
 		#clear the screen (scrolling up)
 		clear -x
 		#write to the log file that build and packaging are complete
 		touch box86-2deb-weekly_log.log
 		NOWTIME="`date +"%T"`"
 		echo "[$NOWTIME | $NOWDAY] build and packaging complete." >> box86-2deb-weekly_log.log
+		upload-deb || error "Failed to upload deb! (line 145)"
 		#print message
 		echo "waiting for 7 days..."
 		#count down for 7 days
@@ -167,3 +167,4 @@ while true; do
 	fi
 
 done
+
