@@ -1,0 +1,6 @@
+Origin: weekly_box86_debs
+Label: weekly_box86_debs
+Codename: buster
+Architectures: armhf
+Components: main
+Description: weekly box86 debs
