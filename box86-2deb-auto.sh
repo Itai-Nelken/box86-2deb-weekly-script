@@ -117,6 +117,8 @@ function upload-deb() {
 	printf ' '$(sha256sum Packages.gz | cut --delimiter=' ' --fields=1)' %16d Packages.gz' $(wc --bytes Packages.gz | cut --delimiter=' ' --fields=1) >> Release
 	printf '\n '$(sha256sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release
 	cd ..
+	git fetch
+	git pull
 	git stage debs/
 	echo "updated deb to $BOX86COMMIT" > commit.txt
 	git commit --file=commit.txt
