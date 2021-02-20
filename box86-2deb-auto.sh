@@ -170,6 +170,8 @@ while true; do
 			echo "$DAYSLEFT days left..."
 			sleep 86400
 			DAYSLEFT=$((DAYSLEFT-1))
+			touch box86-2deb-weekly_log.log
+			echo "[ $(printf '%(%Y-%m-%d)T\n' -1) | $(date +"%T") ] $DAYSLEFT days left until next compile/packaging/upload." >> $DIR/box86-2deb-weekly_log.log
 		done
 	else
 		echo "not today :("
@@ -181,6 +183,8 @@ while true; do
 		done
 		echo "10 minutes passed"
 		sleep 5
+		touch box86-2deb-weekly_log.log
+		echo "[ $(printf '%(%Y-%m-%d)T\n' -1) | $(date +"%T") ] script is running." >> $DIR/box86-2deb-weekly_log.log
 		clear -x
 
 	fi
