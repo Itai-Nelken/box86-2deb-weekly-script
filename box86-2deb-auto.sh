@@ -57,19 +57,19 @@ function package-box86() {
 
 	#get the just compiled box86 version using the get-box86-version function.
 	get-box86-version ver  || error "Failed to get box86 version! (line 59)"
+	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 60)"
 	#use checkinstall to package box86 into a deb.
 	#all the options are so checkinstall doesn't ask any questions but still has the data it needs.
-	sudo checkinstall -y -D --pkgversion="$BOX86VER" --provides="box86" --conflicts="qemu-user-static" --pkgname="box86" --install="no" make install || error "Failed to run checkinstall! (line 62)"
+	sudo checkinstall -y -D --pkgversion="$BOX86COMMIT" --provides="box86" --conflicts="qemu-user-static" --pkgname="box86" --install="no" make install || error "Failed to run checkinstall! (line 63)"
 }
 
 function clean-up() {
 	#current date in YY/MM/DD format
-	NOWDAY="`printf '%(%Y-%m-%d)T\n' -1`" || error 'Failed to get current date! (line 67)'
+	NOWDAY="`printf '%(%Y-%m-%d)T\n' -1`" || error 'Failed to get current date! (line 68)'
 	#make a folder with the name of the current date (YY/MM/DD format)
-	mkdir -p $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 69)"
+	mkdir -p $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 70)"
 	#make a file with the current sha1 (commit) of the box86 version just compiled.
-	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 71)"
-	echo $BOX86COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 72)"
+	echo $BOX86COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 73)"
 	#move the deb to the directory for the debs. if it fails, try again as root
 	mv box86*.deb $DEBDIR/$NOWDAY || sudo mv box86*.deb $DEBDIR/$NOWDAY || error "Failed to move deb! (line 74)"
 	#remove the home directory from the deb
@@ -91,7 +91,7 @@ function clean-up() {
 
 function upload-deb() {
 	#remove old deb
-	rm $HOME/Documents/weekly-box86-debs/debs/box86*.deb || error "Failed to remove old deb! (line 94)"
+	#rm $HOME/Documents/weekly-box86-debs/debs/box86*.deb || error "Failed to remove old deb! (line 94)"
 	#copy the new deb and tar.xz
 	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debs/$FILE || error "Failed to copy new deb! (line 96)"
 	cp $DEBDIR/$NOWDAY.tar.xz $HOME/Documents/weekly-box86-debs/debs/$NOWDAY.tar.xz || error "Failed to copy new tar.xz archive! (line 97)"
