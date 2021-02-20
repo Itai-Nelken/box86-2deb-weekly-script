@@ -177,7 +177,7 @@ while true; do
 			sleep 60
 		done
 		echo "10 minutes passed"
-		sleep 1
+		sleep 5
 		clear -x
 
 	fi
