@@ -160,15 +160,15 @@ function upload-deb() {
 	gzip -k -f Packages || error "Failed to create new 'Packages.gz' file! (line 160)"
 	#Release, Release.gpg, InRelease
 	cp $HOME/Documents/box86-2deb-weekly-script/Release-template $HOME/Documents/weekly-box86-debs/debian/Release || error "Failed to copy Release file! (line 162)"
-	touch Release
-	#echo -e "\nDate: `LANG=C date -Ru`" >> Release || error "Failed to write date to 'Release' file (line 116)"
-	#echo -e 'MD5Sum:' >> Release || error "Failed to write 'MD5Sum:' to 'Release'! (line 116)"
-	#printf ' '$(md5sum Packages.gz | cut --delimiter=' ' --fields=1)' %16d Packages.gz' $(wc --bytes Packages.gz | cut --delimiter=' ' --fields=1) >> Release || error "Failed to write md5sums to 'Release'! (line 118)"
-	#printf '\n '$(md5sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release || error "Failed to write md5sums to 'Release'! (line 119)"
-	#echo -e '\nSHA256:' >> Release || error "Failed to write 'SHA256:' to 'Release'! (line 120)"
+	#touch Release
+	#echo -e "\nDate: `LANG=C date -Ru`" >> Release || error "Failed to write date to 'Release' file (line 164)"
+	#echo -e 'MD5Sum:' >> Release || error "Failed to write 'MD5Sum:' to 'Release'! (line 165)"
+	#printf ' '$(md5sum Packages.gz | cut --delimiter=' ' --fields=1)' %16d Packages.gz' $(wc --bytes Packages.gz | cut --delimiter=' ' --fields=1) >> Release || error "Failed to write md5sums to 'Release'! (line 166)"
+	#printf '\n '$(md5sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release || error "Failed to write md5sums to 'Release'! (line 167)"
+	#echo -e '\nSHA256:' >> Release || error "Failed to write 'SHA256:' to 'Release'! (line 168)"
 	#printf ' '$(sha256sum Packages.gz | cut --delimiter=' ' --fields=1)' %16d Packages.gz' $(wc --bytes Packages.gz | cut --delimiter=' ' --fields=1) >> Release || error "Failed to write sha256sums to 'Release'! (line 121)"
 	#printf '\n '$(sha256sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release || error "Failed to write sha256sums to 'Release'! (line 122)"
-	apt-ftparchive release . >> Release
+	echo -e "\n$(apt-ftparchive release .)" >> Release
 	gpg --default-key "${EMAIL}" --batch --passphrase="$GPGPASS" -abs -o - Release > Release.gpg
 	gpg --default-key "${EMAIL}" --batch --passphrase="$GPGPASS" --clearsign -o - Release > InRelease
 	cd .. || error "Failed to move one directory up! (line 174)"
