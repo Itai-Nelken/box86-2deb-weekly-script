@@ -5,7 +5,7 @@ DIR="$HOME/Documents/box86-auto-build"
 #define the directory where the deb will be moved to
 DEBDIR="$HOME/Documents/box86-auto-build/debs"
 #define the email variable
-if [[ ! -f "email" ]]; then
+if [[ ! -f "$DIR/email" ]]; then
 	echo -e "$(tput setaf 6)$(tput bold)enter your email:$(tput sgr 0)"
 	read EMAIL
 	while true; do
@@ -14,7 +14,7 @@ if [[ ! -f "email" ]]; then
 	if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]] || [[ "$answer" == "yes" ]] || [[ "$answer" == "YES" ]]; then
 		echo "ok, saving this email."
 		touch $DIR/box86-2deb-weekly_log.log
-		echo "$EMAIL" > email
+		echo "$EMAIL" > $DIR/email
 		echo "[ $(date) ] saved email ($EMAIL)." >> $DIR/box86-2deb-weekly_log.log
 		break
 	elif [[ "$answer" == "n" ]] || [[ "$answer" == "N" ]] || [[ "$answer" == "no" ]] || [[ "$answer" == "NO" ]]; then
@@ -26,7 +26,7 @@ if [[ ! -f "email" ]]; then
 
 	done
 else
-	EMAIL="`cat email`"
+	EMAIL="`cat $DIR/email`"
 fi
 
 function error() {
