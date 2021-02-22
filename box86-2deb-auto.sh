@@ -32,13 +32,13 @@ fi
 function error() {
 	echo -e "\e[91m$1\e[39m"
     echo "[ $(date) ] | ERROR | $1" >> box86-2deb-weekly_log.log
+	exit 1
+ 	break
 }
 
 function warning() {
 	echo -e "$(tput setaf 3)$(tput bold)$1$(tput sgr 0)"
     echo "[ $(date) ] | WARNING | $1" >> box86-2deb-weekly_log.log
- 	exit 1
- 	break
 }
 
 #compile box86 function
@@ -124,11 +124,11 @@ function upload-deb() {
 	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debian/pool/ || error "Failed to copy new deb! (line 124)"
 	cp $DEBDIR/$NOWDAY.tar.xz $HOME/Documents/weekly-box86-debs/debian/source/$NOWDAY.tar.xz || error "Failed to copy new tar.xz archive! (line 125)"
 	#remove apt files
-	rm $HOME/Documents/weekly-box86-debs/debian/Packages || error "Failed to remove old 'Packages' file! (line 127)"
-	rm $HOME/Documents/weekly-box86-debs/debian/Packages.gz || error "Failed to remove old 'Packages.gz' archive! (line 128)"
-	rm $HOME/Documents/weekly-box86-debs/debian/Release || error "Failed to remove old 'Release' file! (line 129)"
-	rm $HOME/Documents/weekly_box86_debs/debian/Release.gpg || error "Failed to remove old 'Release.gpg' file! (line 130)"
-	rm $HOME/Documents/weekly_box86_debs/debian/InRelease || error "Failed to remove old 'InRelease' file! (line 131)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Packages || warning "Failed to remove old 'Packages' file! (line 127)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Packages.gz || warning "Failed to remove old 'Packages.gz' archive! (line 128)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Release || warning "Failed to remove old 'Release' file! (line 129)"
+	rm $HOME/Documents/weekly_box86_debs/debian/Release.gpg || warning "Failed to remove old 'Release.gpg' file! (line 130)"
+	rm $HOME/Documents/weekly_box86_debs/debian/InRelease || warning "Failed to remove old 'InRelease' file! (line 131)"
 	#create new apt files
 	cd $HOME/Documents/weekly-box86-debs/debian/ || error "Failed to change directory! (line 133)"
 	#create 'Packages' and 'Packages.gz'
