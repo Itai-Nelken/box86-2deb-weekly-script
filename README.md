@@ -14,8 +14,22 @@ to view credits and other info, type: `./start.sh --about`. that will show the c
 to update the scripts, type: `./start.sh --update`
 ## Very imprortant notes:
 1) This script only works on **armhf** Linux Debian and Debian based OS's.
-2) it's **VERY IMPORTANT** to git clone and run the scripts from **there folder** in **~/Documents**!!!
-3) by default, this script will compile and package box86 on Thursday every week until stopped.<br>to change to different day, change the `Thu` in line 143 of `box86-2deb-auto.sh` to the first 3 letters of any other day, 
+2) it's **VERY IMPORTANT** to git clone and run the scripts from **there folder** in **~/Documents**!!
+3) you will need to create a gpg key fir the repo signing to work correctly:
+```bash
+sudo apt install gnupg
+gpg --full-gen-key
+```
+select option 1<br>
+enter: `4096`<br>
+enter: `0`<br>
+enter: `y`<br>
+enter your name<br>
+enter your email address<br>
+press ENTER<br>
+enter: `o`<br>
+```
+4) by default, this script will compile and package box86 on Tuesday every week until stopped.<br>to change to different day, change the `Tue` in line 195 of `box86-2deb-auto.sh` to the first 3 letters of any other day, 
 its important that the first letter is capitalized. you can use the table bellow:<br>
 
 | day "code" | day       |
