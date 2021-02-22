@@ -31,14 +31,14 @@ fi
 
 function error() {
 	echo -e "\e[91m$1\e[39m"
-    echo "[ $(date) ] | ERROR | $1" >> box86-2deb-weekly_log.log
+    echo "[ $(date) ] | ERROR | $1" >> $DIR/box86-2deb-weekly_log.log
 	exit 1
  	break
 }
 
 function warning() {
 	echo -e "$(tput setaf 3)$(tput bold)$1$(tput sgr 0)"
-    echo "[ $(date) ] | WARNING | $1" >> box86-2deb-weekly_log.log
+    echo "[ $(date) ] | WARNING | $1" >> $DIR/box86-2deb-weekly_log.log
 }
 
 #compile box86 function
@@ -160,16 +160,16 @@ function upload-deb() {
 
 # main loop, this runs for always until stopped.
 # the code inside assigns the current day to the $NOW variable
-#then it checks if the day is Thursday, if yes it compiles & packages box86
+#then it checks if the day is Tuesday, if yes it compiles & packages box86
 #then it cleans up and waits for 7 days (604800 seconds).
-#after 7 days it checks if the day is Thursday (it should be),
+#after 7 days it checks if the day is Tuesday (it should be),
 #if yes it repeats what is described above.
 while true; do
 	#get the current day (example output: Thu (thursday))
 	NOW="`date | cut -c1-3`"
-	#if the current day is thursday, compile and package box86
-	if [[ "$NOW" == "Thu" ]]; then
-		echo "today is Thursday,"
+	#if the current day is Tuesday, compile and package box86
+	if [[ "$NOW" == "Tue" ]]; then
+		echo "today is Tuesday,"
 		echo "compile time!"
 		compile-box86 || error "Failed to run compile-box86 function! (line 174)"
 		package-box86 || error "Failed to run package-box86 function! (line 175)"
@@ -202,15 +202,9 @@ while true; do
 		done
 	else
 		echo "not today :("
-		somevar="10"
-		for i in {1..10}; do
-			echo "$somevar minutes left..."
-			somevar=$(($somevar-1))
-			sleep 60
-		done
+		sleep 600
 		echo "10 minutes passed"
-		sleep 5
-		touch box86-2deb-weekly_log.log
+		touch $DIR/box86-2deb-weekly_log.log
 		echo "[ $(printf '%(%Y-%m-%d)T\n' -1) | $(date +"%T") ] script is running." >> $DIR/box86-2deb-weekly_log.log
 		clear -x
 
