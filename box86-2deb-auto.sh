@@ -150,7 +150,7 @@ function upload-deb() {
 	cd .. || error "Failed to move one directory up! (line 150)"
 	git fetch || error "Failed to run 'git fetch'! (line 151)"
 	git pull || error "Failed to run 'git pull'! (line 152)"
-	git stage debs/ || error "Failed to stage 'debs/'! (line 153)"
+	git stage debian/ || error "Failed to stage 'debs/'! (line 153)"
 	echo "updated deb to $BOX86COMMIT" > commit.txt || error "Failed to create file with commit message! (line 154)"
 	git commit --file=commit.txt || error "Failed to commit new deb! (line 155)"
 	git push || error "Failed to run 'git push'! (line 156)"
