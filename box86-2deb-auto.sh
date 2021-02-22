@@ -116,7 +116,7 @@ function clean-up() {
 
 function upload-deb() {
 	#copy the new deb and tar.xz
-	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debian/pool/$FILE || error "Failed to copy new deb! (line 118)"
+	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debian/pool/ || error "Failed to copy new deb! (line 118)"
 	cp $DEBDIR/$NOWDAY.tar.xz $HOME/Documents/weekly-box86-debs/debian/source/$NOWDAY.tar.xz || error "Failed to copy new tar.xz archive! (line 119)"
 	#remove apt files
 	rm $HOME/Documents/weekly-box86-debs/debian/Packages || error "Failed to remove old 'Packages' file! (line 121)"
