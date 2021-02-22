@@ -114,7 +114,7 @@ function package-box86() {
 	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 114)"
 	#use checkinstall to package box86 into a deb.
 	#all the options are so checkinstall doesn't ask any questions but still has the data it needs.
-	sudo checkinstall -y -D --pkgversion="$BOX86COMMIT" --provides="box86" --conflicts="qemu-user-static" --pkgname="box86" --install="no" make install || error "Failed to run checkinstall! (line 117)"
+	sudo checkinstall -y -D --pkgversion="0$BOX86COMMIT" --provides="box86" --conflicts="qemu-user-static" --pkgname="box86" --install="no" make install || error "Failed to run checkinstall! (line 117)"
 }
 
 function clean-up() {
