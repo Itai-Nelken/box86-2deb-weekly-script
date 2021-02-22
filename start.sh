@@ -121,4 +121,4 @@ else
 	sudo chmod +x box86-2deb-auto.sh || error "Failed to mark script as executable!"
 	echo -e "done! $(tput setaf 2)✔︎$(tput sgr 0)"
 fi
-./box86-2deb-auto.sh || error "Failed to start script!"
+./box86-2deb-auto.sh || error "Scrpi exited with a error!!"

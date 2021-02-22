@@ -31,7 +31,12 @@ fi
 
 function error() {
 	echo -e "\e[91m$1\e[39m"
-    echo "[ $(date) ] $1" >> box86-2deb-weekly_log.log
+    echo "[ $(date) ] | ERROR | $1" >> box86-2deb-weekly_log.log
+}
+
+function warning() {
+	echo -e "$(tput setaf 3)$(tput bold)$1$(tput sgr 0)"
+    echo "[ $(date) ] | WARNING | $1" >> box86-2deb-weekly_log.log
  	exit 1
  	break
 }
@@ -39,13 +44,13 @@ function error() {
 #compile box86 function
 function compile-box86(){
 	echo "compiling box86..."
-	cd ~/Documents/box86-auto-build || error "Failed to change directory! (line 41)"
-	git clone https://github.com/ptitSeb/box86 || error "Failed to git clone box86 repo! (line 42)"
+	cd ~/Documents/box86-auto-build || error "Failed to change directory! (line 47)"
+	git clone https://github.com/ptitSeb/box86 || error "Failed to git clone box86 repo! (line 48)"
 	cd box86 || error "Failed to change directory! (line 18)"
-	mkdir build; cd build; cmake .. -DRPI4=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo || error "Failed to run cmake! (line 44)"
+	mkdir build; cd build; cmake .. -DRPI4=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo || error "Failed to run cmake! (line 50)"
 	make -j4 || error "Failed to run make! (line 45)"
 	#get current directory path
-	BUILDDIR="`pwd`" || error "Failed to set BUILDDIR variable! (line 47)"
+	BUILDDIR="`pwd`" || error "Failed to set BUILDDIR variable! (line 53)"
 }
 
 #get just compiled (not installed) box86 version
@@ -61,14 +66,14 @@ function get-box86-version() {
 
 #package box86 into a deb using checkinstall function
 function package-box86() {
-	cd $BUILDDIR || error "Failed to change directory to $BUILDDIR! (line 63)"
+	cd $BUILDDIR || error "Failed to change directory to $BUILDDIR! (line 69)"
 	#create the doc-pak directory and copy to it the readme, usage, changelog and license.
 	#this will go in /usr/doc/box86 when the deb is installed.
-	mkdir doc-pak || error "Failed to create doc-pak! (line 66)"
-	cp $DIR/box86/docs/README.md $BUILDDIR/doc-pak || error "Failed to copy README.md to doc-pak! (line 67)"
-	cp $DIR/box86/docs/CHANGELOG.md $BUILDDIR/doc-pak || error "Failed to copy CHANGELOG.md to doc-pak! (line 68)"
-	cp $DIR/box86/docs/USAGE.md $BUILDDIR/doc-pak || error "Failed to copy USAGE.md to doc-pak! (line 69)"
-	cp $DIR/box86/docs/LICENSE $BUILDDIR/doc-pak || error "Failed to copy LICENSE to doc-pak! (line 70)"
+	mkdir doc-pak || error "Failed to create doc-pak! (line 72)"
+	cp $DIR/box86/docs/README.md $BUILDDIR/doc-pak || error "Failed to copy README.md to doc-pak! (line 73)"
+	cp $DIR/box86/docs/CHANGELOG.md $BUILDDIR/doc-pak || error "Failed to copy CHANGELOG.md to doc-pak! (line 74)"
+	cp $DIR/box86/docs/USAGE.md $BUILDDIR/doc-pak || error "Failed to copy USAGE.md to doc-pak! (line 75)"
+	cp $DIR/box86/docs/LICENSE $BUILDDIR/doc-pak || error "Failed to copy LICENSE to doc-pak! (line 76)"
 	#create description-pak.
 	#checkinstall will use this for the deb's control file description and summary entries.
 	echo "Linux Userspace x86 Emulator with a twist.
@@ -78,57 +83,57 @@ function package-box86() {
 	(host system needs to be 32bit little-endian).">description-pak || error "Failed to create description-pak! (line 77)"
 	echo "#!/bin/bash
 	echo 'restarting systemd-binfmt...'
-	systemctl restart systemd-binfmt">postinstall-pak || error "Failed to create postinstall-pak! (line 80)"
+	systemctl restart systemd-binfmt">postinstall-pak || error "Failed to create postinstall-pak! (line 86)"
 
 	#get the just compiled box86 version using the get-box86-version function.
-	get-box86-version ver  || error "Failed to get box86 version! (line 83)"
-	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 84)"
+	get-box86-version ver  || error "Failed to get box86 version! (line 89)"
+	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 90)"
 	#use checkinstall to package box86 into a deb.
 	#all the options are so checkinstall doesn't ask any questions but still has the data it needs.
-	sudo checkinstall -y -D --pkgversion="$BOX86COMMIT" --provides="box86" --conflicts="qemu-user-static" --pkgname="box86" --install="no" make install || error "Failed to run checkinstall! (line 87)"
+	sudo checkinstall -y -D --pkgversion="$BOX86COMMIT" --provides="box86" --conflicts="qemu-user-static" --pkgname="box86" --install="no" make install || error "Failed to run checkinstall! (line 93)"
 }
 
 function clean-up() {
 	#current date in YY/MM/DD format
-	NOWDAY="`printf '%(%Y-%m-%d)T\n' -1`" || error 'Failed to get current date! (line 92)'
+	NOWDAY="`printf '%(%Y-%m-%d)T\n' -1`" || error 'Failed to get current date! (line 98)'
 	#make a folder with the name of the current date (YY/MM/DD format)
-	mkdir -p $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 94)"
+	mkdir -p $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 100)"
 	#make a file with the current sha1 (commit) of the box86 version just compiled.
-	echo $BOX86COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 96)"
+	echo $BOX86COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 102)"
 	#move the deb to the directory for the debs. if it fails, try again as root
-	mv box86*.deb $DEBDIR/$NOWDAY || sudo mv box86*.deb $DEBDIR/$NOWDAY || error "Failed to move deb! (line 98)"
+	mv box86*.deb $DEBDIR/$NOWDAY || sudo mv box86*.deb $DEBDIR/$NOWDAY || error "Failed to move deb! (line 104)"
 	#remove the home directory from the deb
-	cd $DEBDIR/$NOWDAY || error "Failed to change directory to $DEBDIR/$NOWDAY! (line 100)"
-	FILE="`basename *.deb`" || error "Failed to get deb filename! (line 101)"
-	FILEDIR="`echo $FILE | cut -c1-22`" || error "Failed to generate name for directory for the deb! (line 102)"
-	dpkg-deb -R $FILE $FILEDIR || error "Failed to extract the deb! (line 103)"
+	cd $DEBDIR/$NOWDAY || error "Failed to change directory to $DEBDIR/$NOWDAY! (line 106)"
+	FILE="`basename *.deb`" || error "Failed to get deb filename! (line 107)"
+	FILEDIR="`echo $FILE | cut -c1-22`" || error "Failed to generate name for directory for the deb! (line 108)"
+	dpkg-deb -R $FILE $FILEDIR || error "Failed to extract the deb! (line 109)"
 	rm -r $FILEDIR/home
-	rm -f $FILE || error "Failed to remove old deb! (line 105)"
-	dpkg-deb -b $FILEDIR $FILE || error "Failed to repack the deb! (line 106)"
-	rm -r $FILEDIR || error "Failed to remove temporary deb directory! (line 107)"
-	cd $DEBDIR || error "Failed to change directory to $DEBDIR! (line 108)"
+	rm -f $FILE || error "Failed to remove old deb! (line 111)"
+	dpkg-deb -b $FILEDIR $FILE || error "Failed to repack the deb! (line 112)"
+	rm -r $FILEDIR || error "Failed to remove temporary deb directory! (line 112)"
+	cd $DEBDIR || error "Failed to change directory to $DEBDIR! (line 114)"
 	#compress the folder with the dabe and sha1.txt into a tar.xz archive
-	tar -cJf $NOWDAY.tar.xz $NOWDAY/ || error "Failed to compress today's build into a tar.xz archive! (line 110)"
+	tar -cJf $NOWDAY.tar.xz $NOWDAY/ || error "Failed to compress today's build into a tar.xz archive! (line 116)"
 	#remove the box86 folder
-	cd $DIR || error "Failed to change directory to $DIR! (line 112)"
-	sudo rm -rf box86 || error "Failed to remove box86 folder! (line 113)"
+	cd $DIR || error "Failed to change directory to $DIR! (line 118)"
+	sudo rm -rf box86 || error "Failed to remove box86 folder! (line 119)"
 }
 
 function upload-deb() {
 	#copy the new deb and tar.xz
-	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debian/pool/ || error "Failed to copy new deb! (line 119)"
-	cp $DEBDIR/$NOWDAY.tar.xz $HOME/Documents/weekly-box86-debs/debian/source/$NOWDAY.tar.xz || error "Failed to copy new tar.xz archive! (line 120)"
+	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debian/pool/ || error "Failed to copy new deb! (line 124)"
+	cp $DEBDIR/$NOWDAY.tar.xz $HOME/Documents/weekly-box86-debs/debian/source/$NOWDAY.tar.xz || error "Failed to copy new tar.xz archive! (line 125)"
 	#remove apt files
-	rm $HOME/Documents/weekly-box86-debs/debian/Packages || error "Failed to remove old 'Packages' file! (line 122)"
-	rm $HOME/Documents/weekly-box86-debs/debian/Packages.gz || error "Failed to remove old 'Packages.gz' archive! (line 123)"
-	rm $HOME/Documents/weekly-box86-debs/debian/Release || error "Failed to remove old 'Release' file! (line 124)"
-	rm $HOME/Documents/weekly_box86_debs/debian/Release.gpg || error "Failed to remove old 'Release.gpg' file! (line 125)"
-	rm $HOME/Documents/weekly_box86_debs/debian/InRelease || error "Failed to remove old 'InRelease' file! (line 126)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Packages || error "Failed to remove old 'Packages' file! (line 127)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Packages.gz || error "Failed to remove old 'Packages.gz' archive! (line 128)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Release || error "Failed to remove old 'Release' file! (line 129)"
+	rm $HOME/Documents/weekly_box86_debs/debian/Release.gpg || error "Failed to remove old 'Release.gpg' file! (line 130)"
+	rm $HOME/Documents/weekly_box86_debs/debian/InRelease || error "Failed to remove old 'InRelease' file! (line 131)"
 	#create new apt files
-	cd $HOME/Documents/weekly-box86-debs/debian/ || error "Failed to change directory! (line 128)"
+	cd $HOME/Documents/weekly-box86-debs/debian/ || error "Failed to change directory! (line 133)"
 	#create 'Packages' and 'Packages.gz'
-	dpkg-scanpackages --multiversion . > Packages || error "Failed to create new 'Packages' file! (line 130)"
-	gzip -k -f Packages || error "Failed to create new 'Packages.gz' file! (line 131)"
+	dpkg-scanpackages --multiversion . > Packages || error "Failed to create new 'Packages' file! (line 135)"
+	gzip -k -f Packages || error "Failed to create new 'Packages.gz' file! (line 136)"
 	#Release, Release.gpg, InRelease
 	#cp $HOME/Documents/box86-2deb-weekly-script/Release-template $HOME/Documents/weekly-box86-debs/debian/Release || error "Failed to copy Release file! (line 114)"
 	#touch Release
@@ -142,15 +147,15 @@ function upload-deb() {
 	apt-ftparchive release . > Release
 	gpg --default-key "${EMAIL}" -abs -o - Release > Release.gpg
 	gpg --default-key "${EMAIL}" --clearsign -o - Release > InRelease
-	cd .. || error "Failed to move one directory up! (line 145)"
-	git fetch || error "Failed to run 'git fetch'! (line 146)"
-	git pull || error "Failed to run 'git pull'! (line 147)"
-	git stage debs/ || error "Failed to stage 'debs/'! (line 148)"
-	echo "updated deb to $BOX86COMMIT" > commit.txt || error "Failed to create file with commit message! (line 149)"
-	git commit --file=commit.txt || error "Failed to commit new deb! (line 150)"
-	git push || error "Failed to run 'git push'! (line 150)"
-	rm -f commit.txt || error "Failed to remove commit message file! (line 152)"
-	cd $DIR || error "Failed to change directory to $DIR! (line 153)"
+	cd .. || error "Failed to move one directory up! (line 150)"
+	git fetch || error "Failed to run 'git fetch'! (line 151)"
+	git pull || error "Failed to run 'git pull'! (line 152)"
+	git stage debs/ || error "Failed to stage 'debs/'! (line 153)"
+	echo "updated deb to $BOX86COMMIT" > commit.txt || error "Failed to create file with commit message! (line 154)"
+	git commit --file=commit.txt || error "Failed to commit new deb! (line 155)"
+	git push || error "Failed to run 'git push'! (line 156)"
+	rm -f commit.txt || error "Failed to remove commit message file! (line 157)"
+	cd $DIR || error "Failed to change directory to $DIR! (line 158)"
 }
 
 # main loop, this runs for always until stopped.
@@ -166,9 +171,9 @@ while true; do
 	if [[ "$NOW" == "Thu" ]]; then
 		echo "today is Thursday,"
 		echo "compile time!"
-		compile-box86 || error "Failed to run compile-box86 function! (line 169)"
-		package-box86 || error "Failed to run package-box86 function! (line 170)"
-		clean-up || error "Failed to run clean-up function! (line 171)"
+		compile-box86 || error "Failed to run compile-box86 function! (line 174)"
+		package-box86 || error "Failed to run package-box86 function! (line 175)"
+		clean-up || error "Failed to run clean-up function! (line 176)"
 		#clear the screen (scrolling up)
 		clear -x
 		#write to the log file that build and packaging are complete
@@ -180,7 +185,7 @@ while true; do
 		=============================" >> box86-2deb-weekly_log.log
 		NOWTIME="`date +"%T"`"
 		echo "[$NOWTIME | $NOWDAY] build and packaging complete." >> box86-2deb-weekly_log.log
-		upload-deb || error "Failed to upload deb! (line 183)"
+		upload-deb || error "Failed to upload deb! (line 188)"
 		#write to log that uploading is complete
 		NOWTIME="`date +"%T"`"
 		echo "[$NOWTIME | $NOWDAY] uploading complete." >> box86-2deb-weekly_log.log
