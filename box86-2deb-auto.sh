@@ -13,8 +13,9 @@ if [[ ! -f "email" ]]; then
 	read answer
 	if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]] || [[ "$answer" == "yes" ]] || [[ "$answer" == "YES" ]]; then
 		echo "ok, saving this email."
+		touch $DIR/box86-2deb-weekly_log.log
 		echo "$EMAIL" > email
-		echo "[ $(date) ] saved email ($EMAIL)."
+		echo "[ $(date) ] saved email ($EMAIL)." >> $DIR/box86-2deb-weekly_log.log
 		break
 	elif [[ "$answer" == "n" ]] || [[ "$answer" == "N" ]] || [[ "$answer" == "no" ]] || [[ "$answer" == "NO" ]]; then
 		echo "ok, won't save this email."
