@@ -214,7 +214,7 @@ while true; do
 		NOWTIME="`date +"%T"`"
 		echo "[$NOWTIME | $NOWDAY] uploading complete." >> box86-2deb-weekly_log.log
 		#print message
-		echo "waiting for 7 days..."
+		echo "waiting for 1 day..."
 		#count down for 7 days
 		#DAYSLEFT="7"
 		#for i in {1..7}; do
@@ -224,10 +224,10 @@ while true; do
 		#	touch box86-2deb-weekly_log.log
 		#	echo "[ $(printf '%(%Y-%m-%d)T\n' -1) | $(date +"%T") ] $DAYSLEFT days left until next compile/packaging/upload." >> $DIR/box86-2deb-weekly_log.log
 		#done
+		sleep 86400
 	else
 		echo "not today :("
-		sleep 600
-		echo "10 minutes passed"
+		sleep 86400
 		touch $DIR/box86-2deb-weekly_log.log
 		echo "[ $(printf '%(%Y-%m-%d)T\n' -1) | $(date +"%T") ] script is running." >> $DIR/box86-2deb-weekly_log.log
 		clear -x
