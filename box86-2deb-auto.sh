@@ -216,14 +216,14 @@ while true; do
 		#print message
 		echo "waiting for 7 days..."
 		#count down for 7 days
-		DAYSLEFT="7"
-		for i in {1..7}; do
-			echo "$DAYSLEFT days left..."
-			sleep 86400
-			DAYSLEFT=$((DAYSLEFT-1))
-			touch box86-2deb-weekly_log.log
-			echo "[ $(printf '%(%Y-%m-%d)T\n' -1) | $(date +"%T") ] $DAYSLEFT days left until next compile/packaging/upload." >> $DIR/box86-2deb-weekly_log.log
-		done
+		#DAYSLEFT="7"
+		#for i in {1..7}; do
+		#	echo "$DAYSLEFT days left..."
+		#	sleep 86400
+		#	DAYSLEFT=$((DAYSLEFT-1))
+		#	touch box86-2deb-weekly_log.log
+		#	echo "[ $(printf '%(%Y-%m-%d)T\n' -1) | $(date +"%T") ] $DAYSLEFT days left until next compile/packaging/upload." >> $DIR/box86-2deb-weekly_log.log
+		#done
 	else
 		echo "not today :("
 		sleep 600
