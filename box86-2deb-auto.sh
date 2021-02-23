@@ -169,8 +169,8 @@ function upload-deb() {
 	#printf ' '$(sha256sum Packages.gz | cut --delimiter=' ' --fields=1)' %16d Packages.gz' $(wc --bytes Packages.gz | cut --delimiter=' ' --fields=1) >> Release || error "Failed to write sha256sums to 'Release'! (line 121)"
 	#printf '\n '$(sha256sum Packages | cut --delimiter=' ' --fields=1)' %16d Packages' $(wc --bytes Packages | cut --delimiter=' ' --fields=1) >> Release || error "Failed to write sha256sums to 'Release'! (line 122)"
 	echo -e "\n$(apt-ftparchive release .)" >> Release
-	gpg --default-key "${EMAIL}" --batch --passphrase="$GPGPASS" -abs -o - Release > Release.gpg
-	gpg --default-key "${EMAIL}" --batch --passphrase="$GPGPASS" --clearsign -o - Release > InRelease
+	gpg --default-key "${EMAIL}" --batch --pinentry-mode="loopback" --passphrase="$GPGPASS" -abs -o - Release > Release.gpg
+	gpg --default-key "${EMAIL}" --batch --pinentry-mode="loopback" --passphrase="$GPGPASS" --clearsign -o - Release > InRelease
 	cd .. || error "Failed to move one directory up! (line 174)"
 	git fetch || error "Failed to run 'git fetch'! (line 175)"
 	git pull || error "Failed to run 'git pull'! (line 176)"
