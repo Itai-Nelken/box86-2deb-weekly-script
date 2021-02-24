@@ -224,6 +224,7 @@ while true; do
 		#	touch box86-2deb-weekly_log.log
 		#	echo "[ $(printf '%(%Y-%m-%d)T\n' -1) | $(date +"%T") ] $DAYSLEFT days left until next compile/packaging/upload." >> $DIR/box86-2deb-weekly_log.log
 		#done
+		#sleep 1 day
 		sleep 86400
 	else
 		echo "not today :("
