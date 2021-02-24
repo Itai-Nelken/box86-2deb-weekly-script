@@ -5,4 +5,4 @@
     * `git config --global user.name "User-Name"`
 - to run the script in background and keep it running even after logging out of a ssh session:
     * `nohup ./start.sh &`
-    * all the output will be in a file called `nohup.out` (I think its called `nohup`).
+    * all the output will be in a file called `nohup.out` (I think the file called **nohup**.out).
