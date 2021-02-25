@@ -2,7 +2,7 @@
  a script that automatically compiles and packages [box86](https://github.com/ptitSeb/box86) into a deb using [checkinstall](http://checkinstall.izto.org/).
 
 to download and run:
-### Please note that the scripts are built to work for my use case, you will have to tweak them so they work for you. 
+### Please note that the scripts are written for my use case, you will have to tweak them slightly so they work for you. 
 ```bash
 cd Documents
 git clone https://github.com/Itai-Nelken/box86-2deb-weekly-script.git
@@ -13,9 +13,9 @@ sudo chmod +x start.sh
 to view credits and other info, type: `./start.sh --about`. that will show the credits and some more info and exit.
 to update the scripts, type: `./start.sh --update`
 ## Very imprortant notes:
-1) This script only works on **armhf** Linux Debian and Debian based OS's.
+1) This script only works on **armhf** Debian Linux and Debian based distros.
 2) it's **VERY IMPORTANT** to git clone and run the scripts from **their folder** in **~/Documents**!!
-3) the debs version will be a `0` followed by the git sha1 (commit "code") of the box86 version just built.<br>the `0` is neccessary for the deb to work properly because the version of a deb package has to start with a number.
+3) the debs version will be a `0` followed by the git sha1 (commit "code") of the box86 version just built.<br>the `0` (or any other number) is neccessary for the deb to work properly because the version of a deb package has to start with a number.
 4) you will need to create a gpg key for the repo signing to work correctly:
 ```bash
 sudo apt install gnupg
@@ -48,8 +48,8 @@ its important that the first letter is capitalized. you can use the table bellow
 
 ## Logs
 the script logs error and warning messages to `~/Documents/box86-auto-build/box86-2deb-weekly_log.log`
-you won't see the actual error, but what part failed. for example:
-`[ Wed Feb 24 16:24:15 <timezone> 2021 ] | ERROR | Failed to run package-box86 function! (line 199)`
+you won't see the actual error, but what part failed. for example:<br>
+`[ Wed Feb 24 16:24:15 <timezone> 2021 ] | ERROR | Failed to run package-box86 function! (line 199)`<br>
 of course `<timezone>` will be your timezone.
 
 ## License
