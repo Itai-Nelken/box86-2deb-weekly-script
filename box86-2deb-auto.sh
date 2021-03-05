@@ -152,8 +152,8 @@ function upload-deb() {
 	rm $HOME/Documents/weekly-box86-debs/debian/Packages || warning "Failed to remove old 'Packages' file! (line 152)"
 	rm $HOME/Documents/weekly-box86-debs/debian/Packages.gz || warning "Failed to remove old 'Packages.gz' archive! (line 153)"
 	rm $HOME/Documents/weekly-box86-debs/debian/Release || warning "Failed to remove old 'Release' file! (line 154)"
-	rm $HOME/Documents/weekly_box86_debs/debian/Release.gpg || warning "Failed to remove old 'Release.gpg' file! (line 1545"
-	rm $HOME/Documents/weekly_box86_debs/debian/InRelease || warning "Failed to remove old 'InRelease' file! (line 156)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Release.gpg || warning "Failed to remove old 'Release.gpg' file! (line 1545"
+	rm $HOME/Documents/weekly-box86-debs/debian/InRelease || warning "Failed to remove old 'InRelease' file! (line 156)"
 	#create new apt files
 	cd $HOME/Documents/weekly-box86-debs/debian/ || error "Failed to change directory! (line 158)"
 	#create 'Packages' and 'Packages.gz'
