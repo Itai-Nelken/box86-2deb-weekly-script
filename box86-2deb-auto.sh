@@ -109,7 +109,7 @@ function package-box86() {
 	echo "#!/bin/bash
 	echo 'restarting systemd-binfmt...'
 	systemctl restart systemd-binfmt">postinstall-pak || error "Failed to create postinstall-pak! (line 111)"
-
+	
 	#get the just compiled box86 version using the get-box86-version function.
 	get-box86-version ver  || error "Failed to get box86 version! (line 114)"
 	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 115)"
