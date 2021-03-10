@@ -130,37 +130,41 @@ function clean-up() {
 	#remove the home directory from the deb
 	cd $DEBDIR/$NOWDAY || error "Failed to change directory to $DEBDIR/$NOWDAY! (line 131)"
 	FILE="`basename *.deb`" || error "Failed to get deb filename! (line 132)"
-	FILEDIR="`echo $FILE | cut -c1-22`" || error "Failed to generate name for directory for the deb! (line 133)"
+	FILEDIR="`echo $FILE | cut -c1-28`" || error "Failed to generate name for directory for the deb! (line 133)"
 	dpkg-deb -R $FILE $FILEDIR || error "Failed to extract the deb! (line 134)"
 	rm -r $FILEDIR/home || warning "Failed to remove home folder from deb! (line 135)"
-	rm -f $FILE || error "Failed to remove old deb! (line 136)"
-	dpkg-deb -b $FILEDIR $FILE || error "Failed to repack the deb! (line 137)"
-	rm -r $FILEDIR || error "Failed to remove temporary deb directory! (line 138)"
-	cd $DEBDIR || error "Failed to change directory to $DEBDIR! (line 139)"
+	cd $FILEDIR/usr || error "Failed to cd into '$FILEDIR/usr/'! (line 136)"
+	mv local/bin/ . || error "Failed to move 'bin' to '.'! (line 137)"
+	rm -r local/ || error "Failed to remove 'local'! (line 138)"
+	cd ../../ || error "Failed to go 2 directories up! (line 139)"
+	rm -f $FILE || error "Failed to remove old deb! (line 140)"
+	dpkg-deb -b $FILEDIR $FILE || error "Failed to repack the deb! (line 141)"
+	rm -r $FILEDIR || error "Failed to remove temporary deb directory! (line 142)"
+	cd $DEBDIR || error "Failed to change directory to $DEBDIR! (line 143)"
 	#compress the folder with the deb and sha1.txt into a tar.xz archive
-	tar -cJf $NOWDAY.tar.xz $NOWDAY/ || error "Failed to compress today's build into a tar.xz archive! (line 141)"
+	tar -cJf $NOWDAY.tar.xz $NOWDAY/ || error "Failed to compress today's build into a tar.xz archive! (line 145)"
 	#remove the box86 folder
-	cd $DIR || error "Failed to change directory to $DIR! (line 143)"
-	sudo rm -rf box86 || error "Failed to remove box86 folder! (line 144)"
+	cd $DIR || error "Failed to change directory to $DIR! (line 147)"
+	sudo rm -rf box86 || error "Failed to remove box86 folder! (line 148)"
 }
 
 function upload-deb() {
 	#copy the new deb and tar.xz
-	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debian/pool/ || error "Failed to copy new deb! (line 149)"
-	cp $DEBDIR/$NOWDAY.tar.xz $HOME/Documents/weekly-box86-debs/debian/source/$NOWDAY.tar.xz || error "Failed to copy new tar.xz archive! (line 150)"
+	cp $DEBDIR/$NOWDAY/box86*.deb $HOME/Documents/weekly-box86-debs/debian/pool/ || error "Failed to copy new deb! (line 153)"
+	cp $DEBDIR/$NOWDAY.tar.xz $HOME/Documents/weekly-box86-debs/debian/source/$NOWDAY.tar.xz || error "Failed to copy new tar.xz archive! (line 154)"
 	#remove apt files
-	rm $HOME/Documents/weekly-box86-debs/debian/Packages || warning "Failed to remove old 'Packages' file! (line 152)"
-	rm $HOME/Documents/weekly-box86-debs/debian/Packages.gz || warning "Failed to remove old 'Packages.gz' archive! (line 153)"
-	rm $HOME/Documents/weekly-box86-debs/debian/Release || warning "Failed to remove old 'Release' file! (line 154)"
-	rm $HOME/Documents/weekly-box86-debs/debian/Release.gpg || warning "Failed to remove old 'Release.gpg' file! (line 1545"
-	rm $HOME/Documents/weekly-box86-debs/debian/InRelease || warning "Failed to remove old 'InRelease' file! (line 156)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Packages || warning "Failed to remove old 'Packages' file! (line 156)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Packages.gz || warning "Failed to remove old 'Packages.gz' archive! (line 157)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Release || warning "Failed to remove old 'Release' file! (line 158)"
+	rm $HOME/Documents/weekly-box86-debs/debian/Release.gpg || warning "Failed to remove old 'Release.gpg' file! (line 159)"
+	rm $HOME/Documents/weekly-box86-debs/debian/InRelease || warning "Failed to remove old 'InRelease' file! (line 160)"
 	#create new apt files
-	cd $HOME/Documents/weekly-box86-debs/debian/ || error "Failed to change directory! (line 158)"
+	cd $HOME/Documents/weekly-box86-debs/debian/ || error "Failed to change directory! (line 162)"
 	#create 'Packages' and 'Packages.gz'
-	dpkg-scanpackages --multiversion . > Packages || error "Failed to create new 'Packages' file! (line 160)"
-	gzip -k -f Packages || error "Failed to create new 'Packages.gz' file! (line 161)"
+	dpkg-scanpackages --multiversion . > Packages || error "Failed to create new 'Packages' file! (line 164)"
+	gzip -k -f Packages || error "Failed to create new 'Packages.gz' file! (line 165)"
 	#Release, Release.gpg, InRelease
-	cp $HOME/Documents/box86-2deb-weekly-script/Release-template $HOME/Documents/weekly-box86-debs/debian/Release || error "Failed to copy Release file! (line 163)"
+	cp $HOME/Documents/box86-2deb-weekly-script/Release-template $HOME/Documents/weekly-box86-debs/debian/Release || error "Failed to copy Release file! (line 167)"
 	#touch Release
 	#echo -e "\nDate: `LANG=C date -Ru`" >> Release || error "Failed to write date to 'Release' file (line 164)"
 	#echo -e 'MD5Sum:' >> Release || error "Failed to write 'MD5Sum:' to 'Release'! (line 165)"
@@ -172,15 +176,15 @@ function upload-deb() {
 	echo -e "\n$(apt-ftparchive release .)" >> Release
 	gpg --default-key "${EMAIL}" --batch --pinentry-mode="loopback" --passphrase="$GPGPASS" -abs -o - Release > Release.gpg
 	gpg --default-key "${EMAIL}" --batch --pinentry-mode="loopback" --passphrase="$GPGPASS" --clearsign -o - Release > InRelease
-	cd .. || error "Failed to move one directory up! (line 175)"
-	git fetch || error "Failed to run 'git fetch'! (line 176)"
-	git pull || error "Failed to run 'git pull'! (line 177)"
-	git stage debian/ || error "Failed to stage 'debs/'! (line 178)"
-	echo "updated box86 to commit $BOX86COMMIT, version $BOX86VER" > commit.txt || error "Failed to create file with commit message! (line 179)"
-	git commit --file=commit.txt || error "Failed to commit new deb! (line 180)"
-	git push || error "Failed to run 'git push'! (line 181)"
-	rm -f commit.txt || error "Failed to remove commit message file! (line 182)"
-	cd $DIR || error "Failed to change directory to $DIR! (line 183)"
+	cd .. || error "Failed to move one directory up! (line 179)"
+	git fetch || error "Failed to run 'git fetch'! (line 180)"
+	git pull || error "Failed to run 'git pull'! (line 181)"
+	git stage debian/ || error "Failed to stage 'debs/'! (line 182)"
+	echo "updated box86 to commit $BOX86COMMIT, version $BOX86VER" > commit.txt || error "Failed to create file with commit message! (line 183)"
+	git commit --file=commit.txt || error "Failed to commit new deb! (line 184)"
+	git push || error "Failed to run 'git push'! (line 185)"
+	rm -f commit.txt || error "Failed to remove commit message file! (line 186)"
+	cd $DIR || error "Failed to change directory to $DIR! (line 187)"
 }
 
 # main loop, this runs for always until stopped.
@@ -196,9 +200,9 @@ while true; do
 	if [[ "$NOW" == "Tue" ]]; then
 		echo "today is Tuesday,"
 		echo "compile time!"
-		compile-box86 || error "Failed to run compile-box86 function! (line 199)"
-		package-box86 || error "Failed to run package-box86 function! (line 200)"
-		clean-up || error "Failed to run clean-up function! (line 201)"
+		compile-box86 || error "Failed to run compile-box86 function! (line 203)"
+		package-box86 || error "Failed to run package-box86 function! (line 204)"
+		clean-up || error "Failed to run clean-up function! (line 205)"
 		#clear the screen (scrolling up)
 		clear -x
 		#write to the log file that build and packaging are complete
@@ -210,7 +214,7 @@ while true; do
 		=============================" >> box86-2deb-weekly_log.log
 		NOWTIME="`date +"%T"`"
 		echo "[$NOWTIME | $NOWDAY] build and packaging complete." >> box86-2deb-weekly_log.log
-		upload-deb || error "Failed to upload deb! (line 213)"
+		upload-deb || error "Failed to upload deb! (line 217)"
 		#write to log that uploading is complete
 		NOWTIME="`date +"%T"`"
 		echo "[$NOWTIME | $NOWDAY] uploading complete." >> box86-2deb-weekly_log.log
