@@ -113,7 +113,7 @@ function package-box86() {
 	#get the just compiled box86 version using the get-box86-version function.
 	get-box86-version ver  || error "Failed to get box86 version! (line 114)"
 	get-box86-version commit || error "Failed to get box86 commit (sha1)! (line 115)"
-	DEBVER="$(echo "$BOX86VER+$BOX86COMMIT")" || error "Failed to generate box86 version for the deb! (line 116)"
+	DEBVER="$(echo "$BOX86VER+$(date +"%F" | sed 's/-//g').$BOX86COMMIT")" || error "Failed to generate box86 version for the deb! (line 116)"
 	#use checkinstall to package box86 into a deb.
 	#all the options are so checkinstall doesn't ask any questions but still has the data it needs.
 	sudo checkinstall -y -D --pkgversion="$DEBVER" --provides="box86" --conflicts="qemu-user-static" --pkgname="box86" --install="no" make install || error "Failed to run checkinstall! (line 119)"
