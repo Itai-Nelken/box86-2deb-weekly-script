@@ -15,7 +15,7 @@ to update the scripts, type: `./start.sh --update`
 ## Very imprortant notes:
 1) This script only works on **armhf** Debian Linux and Debian based distros.
 2) it's **VERY IMPORTANT** to git clone and run the scripts from **their folder** in **~/Documents**!!
-3) the debs version will be a `0` followed by the git sha1 (commit "code") of the box86 version just built.<br>the `0` (or any other number) is neccessary for the deb to work properly because the version of a deb package has to start with a number.
+3) the debs version will be the git tag of the just compiled box86 binary (E.G. 0.2.1) followed by a `+` and the current date (E.G. `20210324`) followed by a `.` and the git sha1 for the commit the box86 binary was built from (E.G. `638b341b`). all together it will look lie this for example: `0.2.1+20210324.638b341b`.
 4) you will need to create a gpg key for the repo signing to work correctly:
 ```bash
 sudo apt install gnupg
