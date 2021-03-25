@@ -26,7 +26,7 @@ if [[ ! -f "$DIR/email" ]]; then
 
 	done
 else
-	EMAIL="`cat $DIR/email`"
+	EMAIL="$(cat $DIR/email)"
 fi
 #define the gpg key password variable
 if [[ ! -f "$DIR/gpgpass" ]]; then
@@ -74,7 +74,7 @@ function compile-box86(){
 	mkdir build; cd build; cmake .. -DRPI4=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo || error "Failed to run cmake! (line 74)"
 	make -j4 || error "Failed to run make! (line 75)"
 	#get current directory path
-	BUILDDIR="`pwd`" || error "Failed to set BUILDDIR variable! (line 77)"
+	BUILDDIR="$(pwd)" || error "Failed to set BUILDDIR variable! (line 77)"
 }
 
 #get just compiled (not installed) box86 version
@@ -82,9 +82,9 @@ function compile-box86(){
 #OPTIONS: ver = box86 version (example: 0.2.1); commit: box86 commit (example: db176ad3).
 function get-box86-version() {
 	if [[ $1 == "ver" ]]; then
-		BOX86VER="`./box86 -v | cut -c21-25`"
+		BOX86VER="$(./box86 -v | cut -c21-25)"
 	elif [[ $1 == "commit" ]]; then
-		BOX86COMMIT="`./box86 -v | cut -c27-34`"
+		BOX86COMMIT="$(./box86 -v | cut -c27-34)"
 	fi
 }
 
@@ -196,28 +196,28 @@ function upload-deb() {
 #if yes it repeats what is described above.
 while true; do
 	#get the current day (example output: Thu (thursday))
-	NOW="`date | cut -c1-3`"
+	NOW="$(date | cut -c1-3)"
 	#if the current day is Tuesday, compile and package box86
 	if [[ "$NOW" == "Tue" ]]; then
 		echo "today is Tuesday,"
 		echo "compile time!"
 		compile-box86 || error "Failed to run compile-box86 function! (line 204)"
 		package-box86 || error "Failed to run package-box86 function! (line 205)"
-		clean-up || error "Failed to run clean-up function! (line 205)"
+		clean-up || error "Failed to run clean-up function! (line 206)"
 		#clear the screen (scrolling up)
 		clear -x
 		#write to the log file that build and packaging are complete
 		touch box86-2deb-weekly_log.log
-		TIME="`date`"
+		TIME="$(date)"
 		echo "
 		=============================
 		$TIME
 		=============================" >> box86-2deb-weekly_log.log
-		NOWTIME="`date +"%T"`"
+		NOWTIME="$(date +"%T")"
 		echo "[$NOWTIME | $NOWDAY] build and packaging complete." >> box86-2deb-weekly_log.log
 		upload-deb || error "Failed to upload deb! (line 217)"
 		#write to log that uploading is complete
-		NOWTIME="`date +"%T"`"
+		NOWTIME="$(date +"%T")"
 		echo "[$NOWTIME | $NOWDAY] uploading complete." >> box86-2deb-weekly_log.log
 		#print message
 		echo "waiting for 1 day..."
