@@ -57,7 +57,6 @@ function error() {
 	echo -e "\e[91m$1\e[39m"
     echo "[ $(date) ] | ERROR | $1" >> $DIR/box86-2deb-weekly_log.log
 	exit 1
- 	break
 }
 
 function warning() {
