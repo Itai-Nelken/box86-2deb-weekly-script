@@ -123,7 +123,7 @@ function clean-up() {
 	#make a file with the current sha1 (commit) of the box86 version just compiled.
 	echo $BOX64COMMIT > $DEBDIR/box64-$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 128)"
 	#move the deb to the directory for the debs. if it fails, try again as root
-	mv box86*.deb $DEBDIR/box64-$NOWDAY || sudo mv box64*.deb $DEBDIR/box64-$NOWDAY || error "Failed to move deb! (line 130)"
+	mv box64*.deb $DEBDIR/box64-$NOWDAY || sudo mv box64*.deb $DEBDIR/box64-$NOWDAY || error "Failed to move deb! (line 130)"
 	#remove the home directory from the deb
 	cd $DEBDIR/box64-$NOWDAY || error "Failed to change directory to $DEBDIR/box64-$NOWDAY! (line 132)"
 	FILE="$(basename *.deb)" || error "Failed to get deb filename! (line 133)"
