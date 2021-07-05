@@ -119,13 +119,13 @@ function clean-up() {
 	#current date in YY/MM/DD format
 	NOWDAY="$(printf '%(%Y-%m-%d)T\n' -1)" || error 'Failed to get current date! (line 124)'
 	#make a folder with the name of the current date (YY/MM/DD format)
-	mkdir -p $DEBDIR/$NOWDAY || error "Failed to create folder for deb! (line 126)"
+	mkdir -p $DEBDIR/box64-$NOWDAY || error "Failed to create folder for deb! (line 126)"
 	#make a file with the current sha1 (commit) of the box86 version just compiled.
-	echo $BOX64COMMIT > $DEBDIR/$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 128)"
+	echo $BOX64COMMIT > $DEBDIR/box64-$NOWDAY/sha1.txt || error "Failed to write box86 commit (sha1) to sha1.txt! (line 128)"
 	#move the deb to the directory for the debs. if it fails, try again as root
-	mv box86*.deb $DEBDIR/$NOWDAY || sudo mv box64*.deb $DEBDIR/$NOWDAY || error "Failed to move deb! (line 130)"
+	mv box86*.deb $DEBDIR/box64-$NOWDAY || sudo mv box64*.deb $DEBDIR/box64-$NOWDAY || error "Failed to move deb! (line 130)"
 	#remove the home directory from the deb
-	cd $DEBDIR/$NOWDAY || error "Failed to change directory to $DEBDIR/$NOWDAY! (line 132)"
+	cd $DEBDIR/box64-$NOWDAY || error "Failed to change directory to $DEBDIR/box64-$NOWDAY! (line 132)"
 	FILE="$(basename *.deb)" || error "Failed to get deb filename! (line 133)"
 	FILEDIR="$(echo $FILE | cut -c1-28)" || error "Failed to generate name for directory for the deb! (line 134)"
 	dpkg-deb -R $FILE $FILEDIR || error "Failed to extract the deb! (line 135)"
@@ -139,10 +139,10 @@ function clean-up() {
 	rm -r $FILEDIR || error "Failed to remove temporary deb directory! (line 143)"
 	cd $DEBDIR || error "Failed to change directory to $DEBDIR! (line 144)"
 	#compress the folder with the deb and sha1.txt into a tar.xz archive
-	tar -cJf $NOWDAY.tar.xz $NOWDAY/ || error "Failed to compress today's build into a tar.xz archive! (line 146)"
+	tar -cJf box64-$NOWDAY.tar.xz box64-$NOWDAY/ || error "Failed to compress today's build into a tar.xz archive! (line 146)"
 	#remove the box86 folder
 	cd $DIR || error "Failed to change directory to $DIR! (line 148)"
-	sudo rm -rf box86 || error "Failed to remove box86 folder! (line 149)"
+	sudo rm -rf box64 || error "Failed to remove box86 folder! (line 149)"
 }
 
 function upload-deb() {
