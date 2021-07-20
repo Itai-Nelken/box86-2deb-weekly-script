@@ -30,14 +30,17 @@ echo "
 =============================
 $TIME
 =============================" >> $LOG
+#cd $DIR
+#git clone https://github.com/ptitseb/box64.git || error "failed to clone repository"
+#cd box64 || error "failed to enter box64 folder"
+#mkdir build || error "failed to create build folder"
+#cd build || error "Failed to enter build folder"
+#cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DARM_DYNAREC=1 .. || error "Failed to run cmake"
+#make -j4
+ds64-run ./build-64.sh
 cd $DIR
-git clone https://github.com/ptitseb/box64.git || error "failed to clone repository"
-cd box64 || error "failed to enter box64 folder"
-mkdir build || error "failed to create build folder"
-cd build || error "Failed to enter build folder"
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DARM_DYNAREC=1 .. || error "Failed to run cmake"
-make -j4
-BUILDDIR="$(pwd)"
+#BUILDDIR="$(pwd)"
+BUILDDIR="$DIR/box64/build"
 mkdir doc-pak || error "failed to create doc-pak folder"
 cp $DIR/box64/README.md doc-pak/ || error "Failed to copy readme to doc-pak"
 cp $DIR/box64/CHANGELOG.md doc-pak/ || error "Failed to copy changelog to doc-pak"
