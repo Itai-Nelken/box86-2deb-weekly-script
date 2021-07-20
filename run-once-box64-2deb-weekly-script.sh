@@ -41,6 +41,7 @@ ds64-run $STARTDIR/build-64.sh
 cd $DIR
 #BUILDDIR="$(pwd)"
 BUILDDIR="$DIR/box64/build"
+cd $BUILDDIR
 mkdir doc-pak || error "failed to create doc-pak folder"
 cp $DIR/box64/README.md doc-pak/ || error "Failed to copy readme to doc-pak"
 cp $DIR/box64/CHANGELOG.md doc-pak/ || error "Failed to copy changelog to doc-pak"
