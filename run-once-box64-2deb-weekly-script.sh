@@ -37,7 +37,7 @@ $TIME
 #cd build || error "Failed to enter build folder"
 #cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DARM_DYNAREC=1 .. || error "Failed to run cmake"
 #make -j4
-ds64-run ./build-64.sh
+ds64-run $STARTDIR/build-64.sh
 cd $DIR
 #BUILDDIR="$(pwd)"
 BUILDDIR="$DIR/box64/build"
