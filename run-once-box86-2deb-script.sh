@@ -97,7 +97,7 @@ function package-box86() {
 	cp $DIR/box86/docs/README.md $BUILDDIR/doc-pak || error "Failed to copy README.md to doc-pak! (line 97)"
 	cp $DIR/box86/docs/CHANGELOG.md $BUILDDIR/doc-pak || error "Failed to copy CHANGELOG.md to doc-pak! (line 98)"
 	cp $DIR/box86/docs/USAGE.md $BUILDDIR/doc-pak || error "Failed to copy USAGE.md to doc-pak! (line 99)"
-	cp $DIR/box86/docs/LICENSE $BUILDDIR/doc-pak || error "Failed to copy LICENSE to doc-pak! (line 100)"
+	cp $DIR/box86/LICENSE $BUILDDIR/doc-pak || error "Failed to copy LICENSE to doc-pak! (line 100)"
 	cp $DIR/box86/docs/X86WINE.md $BUILDDIR/doc-pak || error "Failed to copy X86WINE.md to doc-pak! (line 101)"
 	#create description-pak.
 	#checkinstall will use this for the deb's control file description and summary entries.
