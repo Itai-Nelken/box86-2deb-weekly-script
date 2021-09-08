@@ -97,7 +97,7 @@ function package-box86() {
 	cp $DIR/box86/docs/README.md $BUILDDIR/doc-pak || error "Failed to copy README.md to doc-pak! (line 97)"
 	cp $DIR/box86/docs/CHANGELOG.md $BUILDDIR/doc-pak || error "Failed to copy CHANGELOG.md to doc-pak! (line 98)"
 	cp $DIR/box86/docs/USAGE.md $BUILDDIR/doc-pak || error "Failed to copy USAGE.md to doc-pak! (line 99)"
-	cp $DIR/box86/docs/LICENSE $BUILDDIR/doc-pak || error "Failed to copy LICENSE to doc-pak! (line 100)"
+	cp $DIR/box86/LICENSE $BUILDDIR/doc-pak || error "Failed to copy LICENSE to doc-pak! (line 100)"
 	cp $DIR/box86/docs/X86WINE.md $BUILDDIR/doc-pak || error "Failed to copy X86WINE.md to doc-pak! (line 101)"
 	#create description-pak.
 	#checkinstall will use this for the deb's control file description and summary entries.
@@ -140,6 +140,12 @@ function clean-up() {
 	#cd ../../ || error "Failed to go 2 directories up! (line 140)"
 	rm -f $FILE || error "Failed to remove old deb! (line 141)"
 	dpkg-deb -b $FILEDIR $FILE || error "Failed to repack the deb! (line 142)"
+
+	# for pi-apps: make a deb with no binfmt restarting
+	rm -f $FILEDIR/DEBIAN/postinst
+	sed -i 's/Package: box86/Package: box86-pi-apps/' $FILEDIR/DEBIAN/control
+	dpkg-deb -b $FILEDIR $FILEDIR-pi-apps.deb
+
 	rm -r $FILEDIR || error "Failed to remove temporary deb directory! (line 143)"
 	cd $DEBDIR || error "Failed to change directory to $DEBDIR! (line 144)"
 	#compress the folder with the deb and sha1.txt into a tar.xz archive

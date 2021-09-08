@@ -43,9 +43,9 @@ cd $DIR
 BUILDDIR="$DIR/box64/build"
 cd $BUILDDIR
 mkdir doc-pak || error "failed to create doc-pak folder"
-cp $DIR/box64/README.md doc-pak/ || error "Failed to copy readme to doc-pak"
-cp $DIR/box64/CHANGELOG.md doc-pak/ || error "Failed to copy changelog to doc-pak"
-cp $DIR/box64/USAGE.md doc-pak/ || error "Failed to copy usage to doc-pak"
+cp $DIR/box64/docs/README.md doc-pak/ || error "Failed to copy readme to doc-pak"
+cp $DIR/box64/docs/CHANGELOG.md doc-pak/ || error "Failed to copy changelog to doc-pak"
+cp $DIR/box64/docs/USAGE.md doc-pak/ || error "Failed to copy usage to doc-pak"
 cp $DIR/box64/LICENSE doc-pak/ || error "Failed to copy license to doc-pak"
 echo "Box64 lets you run x86_64 Linux programs (such as games) on non-x86_64 Linux systems, like ARM (host system needs to be 64bit little-endian)">description-pak || error "Failed to create description-pak"
 BOX64VER="$(./box64 -v | cut -c21-25)" || error "Failed to get box64 version"
