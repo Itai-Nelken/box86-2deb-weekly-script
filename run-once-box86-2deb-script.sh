@@ -140,12 +140,6 @@ function clean-up() {
 	#cd ../../ || error "Failed to go 2 directories up! (line 140)"
 	rm -f $FILE || error "Failed to remove old deb! (line 141)"
 	dpkg-deb -b $FILEDIR $FILE || error "Failed to repack the deb! (line 142)"
-
-	# for pi-apps: make a deb with no binfmt restarting
-	rm -f $FILEDIR/DEBIAN/postinst
-	sed -i 's/Package: box86/Package: box86-pi-apps/' $FILEDIR/DEBIAN/control
-	dpkg-deb -b $FILEDIR $FILEDIR-pi-apps.deb
-
 	rm -r $FILEDIR || error "Failed to remove temporary deb directory! (line 143)"
 	cd $DEBDIR || error "Failed to change directory to $DEBDIR! (line 144)"
 	#compress the folder with the deb and sha1.txt into a tar.xz archive
