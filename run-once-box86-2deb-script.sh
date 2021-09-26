@@ -108,7 +108,7 @@ function package-box86() {
 	(host system needs to be 32bit little-endian).">description-pak || error "Failed to create description-pak! (line 108)"
 	echo "#!/bin/bash
 	echo 'restarting systemd-binfmt...'
-	systemctl restart systemd-binfmt">postinstall-pak || error "Failed to create postinstall-pak! (line 111)"
+	systemctl restart systemd-binfmt || echo -e \"\e[1;31mFailed to restart systemd-binfmt! box86 won't get called automatically.\nrebooting might help.\e[0m\"">postinstall-pak || error "Failed to create postinstall-pak! (line 111)"
 	
 	#get the just compiled box86 version using the get-box86-version function.
 	get-box86-version ver  || error "Failed to get box86 version! (line 114)"
