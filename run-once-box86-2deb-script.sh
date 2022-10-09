@@ -104,8 +104,15 @@ function package-box86() {
 
 	Box86 lets you run x86 Linux programs (such as games)
 	on non-x86 Linux, like ARM 
-	(host system needs to be 32bit little-endian).">description-pak || error "Failed to create description-pak! (line 108)"
+	(host system needs to be 32bit little-endian. 
+	64bit ARM works with mutliarch or chroot).">description-pak || error "Failed to create description-pak! (line 108)"
 	echo "#!/bin/bash
+	KARCH=$(uname -m)
+	if [ "$KARCH" = "aarch64" ] || [ "$KARCH" = "aarch64-linux-gnu" ] || [ "$KARCH" = "arm64" ] || [ "$KARCH" = "aarch64_be" ]; then
+		echo -e \"\e[1;31mDetected an ARM processor running in 64-bit mode.\nInstalling multiarch armhf library for box86.\e[0m\"
+		sudo dpkg --add-architecture armhf && sudo apt-get update
+		sudo apt-get install libc6:armhf -y # needed to run box86:armhf on aarch64
+	fi
 	echo 'restarting systemd-binfmt...'
 	if ! systemctl restart systemd-binfmt ; then
 		echo -e \"\e[1;31mFailed to restart systemd-binfmt! box86 won't get called automatically.\nrebooting might help.\e[0m\"
