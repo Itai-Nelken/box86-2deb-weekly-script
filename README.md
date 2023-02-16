@@ -1,3 +1,5 @@
+>## Note: The scripts in this repository were deprecated and replaced with a [new script](https://github.com/Itai-Nelken/weekly-box86-debs/blob/main/create-deb.sh) that is run automatically by github actions.
+
 # box86-2deb weekly script
  a script that automatically compiles and packages [box86](https://github.com/ptitSeb/box86) into a deb using [checkinstall](http://checkinstall.izto.org/).
 
